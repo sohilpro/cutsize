@@ -1,0 +1,3 @@
+<template>
+  <AuthLayout></AuthLayout>
+</template>

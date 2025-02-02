@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input-style {
+    @apply outline-none bg-inherit pb-1;
+  }
+  .btn-form {
+    @apply font-bold flex items-center justify-center rounded-2xl shadow-lg bg-auth-orange py-3 px-10;
+  }
+}
+
+.form-style {
+  @apply flex flex-col gap-2;
+}
+.form-style label {
+  @apply text-sm text-primary;
+}
+.form-style .main-form {
+  @apply flex items-center gap-3 border rounded-2xl border-auth-blue px-2.5 py-2;
+}
+.form-style .main-form .icon-label {
+  @apply flex items-center justify-center p-0.5 rounded-full border border-auth-blue;
+}
