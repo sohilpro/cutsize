@@ -1,3 +1,5 @@
 <template>
-  <AuthLayout></AuthLayout>
+  <AuthLayout title="ورود" :register="true">
+    <AuthLogin />
+  </AuthLayout>
 </template>

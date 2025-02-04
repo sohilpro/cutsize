@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@chenfengyuan/vue-countdown": "^2.1.2",
     "@formkit/addons": "^1.6.9",
     "@formkit/nuxt": "^1.6.9",
     "@nuxtjs/tailwindcss": "^6.13.1",

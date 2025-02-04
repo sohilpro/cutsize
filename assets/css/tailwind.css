@@ -4,11 +4,26 @@
 
 @layer components {
   .input-style {
-    @apply outline-none bg-inherit pb-1;
+    @apply outline-none !bg-inherit pb-1 !w-full;
   }
   .btn-form {
     @apply font-bold flex items-center justify-center rounded-2xl shadow-lg bg-auth-orange py-3 px-10;
   }
+}
+
+@font-face {
+  font-family: "Estedad-VF";
+  src: url("../fonts/Estedad.woff2") format("woff2");
+
+  font-weight: normal;
+  font-style: normal;
+}
+
+*,
+html,
+body {
+  font-family: "Estedad-VF";
+  @apply font-Estedad_VF;
 }
 
 .form-style {
@@ -21,5 +36,14 @@
   @apply flex items-center gap-3 border rounded-2xl border-auth-blue px-2.5 py-2;
 }
 .form-style .main-form .icon-label {
-  @apply flex items-center justify-center p-0.5 rounded-full border border-auth-blue;
+  @apply flex items-center justify-center p-0.5;
+}
+
+/*? FormKit */
+.formkit-outer {
+  @apply w-full;
+}
+
+.formkit-messages {
+  @apply text-red-500;
 }

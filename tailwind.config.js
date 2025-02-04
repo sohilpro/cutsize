@@ -2,8 +2,11 @@
 import formkitTheme from "@formkit/themes/tailwindcss";
 
 export default {
-  content: ["./src/**/*.{js,html,vue}", "./formkit.config.ts"],
+  content: ["./formkit.config.ts"],
   theme: {
+    fontFamily: {
+      Estedad_VF: "Estedad-VF",
+    },
     extend: {
       colors: {
         primary: '#373636',
