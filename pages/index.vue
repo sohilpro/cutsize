@@ -1,5 +1,5 @@
 <template>
-    <div>
-dsfsd
-    </div>
+  <div>
+    <Main />
+  </div>
 </template>

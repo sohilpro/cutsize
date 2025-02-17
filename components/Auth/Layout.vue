@@ -1,8 +1,8 @@
 <template>
   <section>
-    <div class="justify-end w-full flex">
+    <NuxtLink to="/" class="justify-end w-full flex">
       <IconsLogo class="w-60 h-32 ml-32" />
-    </div>
+    </NuxtLink>
 
     <div
       class="flex flex-col gap-[4.5rem] justify-center items-center"
