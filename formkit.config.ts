@@ -1,8 +1,13 @@
-import type { DefaultConfigOptions } from "@formkit/vue";
+import { defineFormKitConfig } from "@formkit/vue";
+import { rootClasses } from "./formkit.theme";
 import { createAutoAnimatePlugin } from "@formkit/addons";
+import { createProPlugin, inputs } from "@formkit/pro";
+import { genesisIcons } from "@formkit/icons"
 
-const config: DefaultConfigOptions = {
-  plugins: [createAutoAnimatePlugin() as VoidFunction],
-};
+const pro = createProPlugin("fk-89c50aee5d", inputs);
 
-export default config;
+export default defineFormKitConfig(() => ({
+  plugins: [pro, createAutoAnimatePlugin() as VoidFunction],
+  icons: { ...genesisIcons },
+  config: { rootClasses },
+}));

@@ -47,3 +47,13 @@ body {
 .formkit-messages {
   @apply text-red-500;
 }
+
+/* .formkit-wrapper,
+.formkit-outer {
+  @apply !mb-0;
+} */
+
+/* .formkit-inner,
+.formkit-input {
+  @apply !ring-0 focus-within:!ring-0 focus-within:!border-none focus:!ring-0 !ring-offset-0 !outline-none;
+} */
