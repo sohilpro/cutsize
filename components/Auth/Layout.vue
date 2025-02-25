@@ -25,7 +25,7 @@
           <p v-if="welcome" class="text-primary">درود! به کات سایز خوش آمدید</p>
         </div>
         <!-- title -->
-        <h5 class="font-bold text-xl absolute top-12">
+        <h5 v-if="showTitle" class="font-bold text-xl absolute top-12">
           {{ title }}
         </h5>
 
@@ -65,12 +65,16 @@ useHead({
   },
 });
 
-const { title, welcome, register, headInBottom } = defineProps({
+const { title, welcome, register, headInBottom, showTitle } = defineProps({
   title: {
     type: String,
     default: "سلام",
   },
   welcome: {
+    type: Boolean,
+    default: true,
+  },
+  showTitle: {
     type: Boolean,
     default: true,
   },

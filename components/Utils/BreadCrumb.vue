@@ -9,19 +9,7 @@
           صفحه اصلی
         </NuxtLink>
         <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="m5.293 8l3.854 3.854l.707-.707L6.707 8l3.147-3.146l-.707-.708z"
-              clip-rule="evenodd"
-            />
-          </svg>
+          <IconsLeft />
         </span>
       </li>
       <li
@@ -41,19 +29,7 @@
           item.name
         }}</span>
         <span v-if="items[itemIndex + 1]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="m5.293 8l3.854 3.854l.707-.707L6.707 8l3.147-3.146l-.707-.708z"
-              clip-rule="evenodd"
-            />
-          </svg>
+          <IconsLeft />
         </span>
       </li>
     </ol>

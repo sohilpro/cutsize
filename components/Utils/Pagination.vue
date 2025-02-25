@@ -8,7 +8,7 @@
       :disabled="currentPage === 1"
       @click="prevPage"
     >
-      ▶
+    <IconsLeft class="rotate-180"/>
     </button>
 
     <!-- Page Numbers -->
@@ -35,7 +35,7 @@
       :disabled="currentPage === totalPages"
       @click="nextPage"
     >
-      ◀
+    <IconsLeft />
     </button>
   </div>
 </template>
