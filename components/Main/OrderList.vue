@@ -83,11 +83,7 @@
 
             <!-- Status -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-              <button
-                class="bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600"
-              >
-                مشاهده و پرینت
-              </button>
+             <IconsPrintShow class="inline cursor-pointer"/>
             </td>
 
             <!-- Project Name -->
