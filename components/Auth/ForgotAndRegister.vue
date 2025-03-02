@@ -38,7 +38,7 @@
           validation="matches:/^09[0-9][0-9]-?[0-9]{3}-?[0-9]{4}$/|required"
           :validation-messages="{
             required: 'این فیلد نباید خالی باشد.',
-            matches: 'شماره تلفن راه صحیح وارد کنید.',
+            matches: 'شماره تلفن را صحیح وارد کنید.',
           }"
           inputmode="numeric"
           :disabled="!state.endTime"
@@ -56,7 +56,7 @@
   >
   <ClientOnly>
     <div class="form-style" :class="{ 'opacity-30': !state.enableInputOtp }">
-      <label for="mobile"> کد تایید را ارد کنید </label>
+      <label for="mobile"> کد تایید را وارد کنید </label>
 
       <div class="main-form">
         <div class="icon-label">

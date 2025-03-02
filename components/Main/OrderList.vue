@@ -183,14 +183,14 @@ const data = ref([
 
 const frameworks = [
   {
-    label: "Excel",
-    value: "excel",
-    asset: "/Icons/excel.png",
-  },
-  {
-    label: "Apt Cut",
+    label: "OPTICUT",
     value: "apt-cut",
     asset: "/Icons/apt-cut.png",
+  },
+  {
+    label: "Cut Master",
+    value: "cut-master",
+    asset: "/Icons/cut-master.png",
   },
   {
     label: "Wincam",
@@ -198,9 +198,9 @@ const frameworks = [
     asset: "/Icons/wincam.png",
   },
   {
-    label: "Cut Master",
-    value: "cut-master",
-    asset: "/Icons/cut-master.png",
+    label: "Excel",
+    value: "excel",
+    asset: "/Icons/excel.png",
   },
 ];
 </script>
