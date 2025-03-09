@@ -1,23 +1,43 @@
 <template>
-  <AuthLayout title="ثبت نام" :welcome="false" :head-in-bottom="true">
-    <AuthForgotAndRegister
+  <AuthLayout v-if="step == 1" title="ثبت نام" :head-in-bottom="true">
+    <AuthLoginAndRegister
       @submit-form="handleRegister"
-      label="برای ثبت نام ، شماره موبایل خود را وارد کنید"
+      btn-title="ارسال کد تایید"
+      :show-forgot-password="false"
     />
+  </AuthLayout>
+
+  <AuthLayout
+    v-else-if="step == 2"
+    :show-title="false"
+    :register="false"
+    :welcome="false"
+    :head-in-bottom="true"
+  >
+    <AuthCheckOtp />
   </AuthLayout>
 </template>
 
 <script setup>
+const step = ref(1);
+const phone_number = usePhoneNumber();
+const loading = useLoading();
+
 const handleRegister = async (body) => {
+  loading.value = true;
+
   try {
-    const data = await $fetch("/api/auth/register", {
+    await $fetch("/api/auth/register", {
       method: "POST",
       body,
     });
 
-    console.log(data);
+    phone_number.value = body.phone_number;
+    step.value = 2;
   } catch (error) {
     console.log(error);
+  } finally {
+    loading.value = false;
   }
 };
 </script>

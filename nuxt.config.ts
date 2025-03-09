@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      api: "http://87.107.165.68",
+      api: "https://api.cutsize.ir",
     },
   },
 

@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   try {
-    const data = await $fetch(`${api}/auth/users`, {
+    const data = await $fetch(`${api}/auth/users/resend_activation`, {
       method: "POST",
       body,
     });

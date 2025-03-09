@@ -6,6 +6,7 @@
     id="change-password"
     :actions="false"
     :incomplete-message="false"
+    @submit="handleChangePassword"
   >
     <main class="flex flex-col gap-3">
       <div class="form-style">
@@ -122,13 +123,27 @@
 
   <!-- buttom form -->
   <div class="flex justify-center mt-2">
-    <button type="submit" class="btn-form" form="change-password">تایید</button>
+    <button
+      type="submit"
+      :disabled="loading"
+      :class="{ 'opacity-50': loading }"
+      class="btn-form"
+      form="change-password"
+    >
+      تایید
+
+      <IconsLoading v-if="loading" />
+    </button>
   </div>
 </template>
 
 <script setup>
 const password = ref();
 const acceptPassword = ref();
+
+const loading = useLoading();
+
+const emit = defineEmits(["submitForm"]);
 
 const showPassword = reactive({
   password: false,
@@ -143,4 +158,10 @@ const showAndHidePassword = () =>
   (showPassword.password = !showPassword.password);
 const showAndHideAcceptPassword = () =>
   (showPassword.acceptPassword = !showPassword.acceptPassword);
+
+const handleChangePassword = () => {
+  if (inputs.password === inputs.acceptPassword) {
+    emit("submitForm", inputs.acceptPassword);
+  }
+};
 </script>
