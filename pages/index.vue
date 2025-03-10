@@ -1,6 +1,8 @@
 <template>
   <div>
     <!-- <Main /> -->
-     <UtilsPopup />
+    <UtilsPopup width="400" :modal-active="true">
+      <AuthInformation />
+    </UtilsPopup>
   </div>
 </template>
