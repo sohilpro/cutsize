@@ -3,7 +3,7 @@
   <div
     class="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 flex items-center justify-center"
   >
-    <IconsAvatar />
+  <IconsEdge class="w-16 h-16"/>
   </div>
 
   <!-- Title -->
@@ -55,13 +55,13 @@
 const items = reactive([
   { label: "نوار", value: "" },
   { label: "نوار 1 میل", value: "" },
-  { label: "نوار 7 میل", value: "" },
+  { label: "نوار 2 میل", value: "" },
   { label: "شیار", value: "" },
   { label: "فارسی", value: "" },
   { label: "دوبل", value: "" },
   { label: "دوبل روی هم", value: "" },
   { label: "نوار و گازور", value: "" },
-  { label: "سیبال", value: "" },
+  { label: "سوبل", value: "" },
   { label: "نوار + شیار", value: "" },
   { label: "دوبل + شیار", value: "" },
   { label: "شیار مخفی", value: "" },

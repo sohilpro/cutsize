@@ -98,7 +98,7 @@
     to="/auth/forgot-password"
     class="flex font-semibold mt-5 items-center"
   >
-    <span> فراموشی رمز عبود </span>
+    <span> فراموشی رمز عبور </span>
 
     <IconsLeft />
   </NuxtLink>

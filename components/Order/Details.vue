@@ -6,6 +6,11 @@
       { name: 'جزییات سفارش', url: '/' },
     ]"
   >
+    <div class="flex items-center gap-5 absolute left-10 -top-5">
+      <IconsPrint class="w-40 h-40 cursor-pointer" />
+      <IconsPdfDl class="w-40 h-40 cursor-pointer" />
+    </div>
+
     <div
       class="border overflow-x-auto h-screen px-2.5 py-1.5 rounded-md flex flex-col gap-2.5"
     >

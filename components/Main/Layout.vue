@@ -21,7 +21,7 @@
           @click="togglePopup"
           class="flex cursor-pointer items-center gap-2"
         >
-          <IconsEdge />
+          <IconsEdge class="w-6 h-6"/>
 
           <span class="text-auth-blue font-bold">تعیین لبه ها</span>
         </div>
