@@ -9,6 +9,10 @@
   .btn-form {
     @apply font-bold flex items-center justify-center rounded-2xl shadow-lg bg-auth-orange py-3 px-10;
   }
+
+  .template_container {
+    @apply max-w-7xl w-full mx-auto;
+  }
 }
 
 @font-face {
@@ -24,6 +28,10 @@ html,
 body {
   font-family: "Estedad-VF";
   @apply font-Estedad_VF;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 .form-style {
@@ -57,3 +65,47 @@ body {
 .formkit-input {
   @apply !ring-0 focus-within:!ring-0 focus-within:!border-none focus:!ring-0 !ring-offset-0 !outline-none;
 } */
+
+/** scroll animation  */
+.containerAnime {
+  width: 90%;
+  overflow-x: hidden;
+  max-width: 1536px;
+  margin: 0.5rem auto;
+  height: 100px;
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 1) 80%,
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.containerAnime .itemLeft {
+  width: 200px;
+  height: 100px;
+  border-radius: 15px;
+  position: absolute;
+  animation: 30s linear infinite;
+}
+
+.containerAnime .itemLeft {
+  left: 1600px;
+  animation-name: sLeft;
+}
+
+@keyframes sLeft {
+  to {
+    left: -200px;
+  }
+}
+
+.containerAnime .item1 {animation-delay: -26.25s;}
+.containerAnime .item2 {animation-delay: -22.5s;}
+.containerAnime .item3 {animation-delay: -18.75s;}
+.containerAnime .item4 {animation-delay: -15s;}
+.containerAnime .item5 {animation-delay: -11.25s;}
+.containerAnime .item6 {animation-delay: -7.5s;}
+.containerAnime .item7 {animation-delay: -3.75s;}
+.containerAnime .item8 {animation-delay: 0s;}
