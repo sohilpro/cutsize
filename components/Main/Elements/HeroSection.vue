@@ -1,10 +1,10 @@
 <template>
   <section
     style="z-index: -2; background-image: url('/img/hero-bg.webp'); background-repeat: no-repeat; background-size: cover;"
-    class="relative rounded-bl-[110px] overflow-hidden py-32 px-40"
+    class="relative rounded-bl-[110px] overflow-hidden py-20 px-40"
   >
     <div class="flex gap-8 flex-col">
-      <h1 class="text-4xl">کات سایز</h1>
+      <h1 class="text-4xl text-black/70">کات سایز</h1>
 
       <div class="space-y-5">
         <p class="text-4xl font-extrabold">ارتباط ساده، برش سریع</p>

@@ -2,5 +2,6 @@
   <div>
     <MainLayoutNavBar />
     <slot />
+    <MainLayoutFooter />
   </div>
 </template>
