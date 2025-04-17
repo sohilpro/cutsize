@@ -10,7 +10,10 @@
     >
       <h4 v-if="!headInBottom" class="text-white text-4xl font-semibold">
         در حال حاضر
-        <span class="text-auth-orange font-bold underline">9998</span>
+        <!-- <span class="text-auth-orange font-bold underline">9998</span> -->
+        <ClientOnly>
+          <AnimatedCounter :value="998" :duration="1000" class="counter" />
+        </ClientOnly>
         کارگاه از کات سایز استفاده میکنند
       </h4>
 
@@ -51,7 +54,10 @@
       class="text-white flex justify-center mt-8 gap-2 text-4xl font-semibold"
     >
       در حال حاضر
-      <span class="text-auth-orange font-bold underline">9998</span>
+      <!-- <span class="text-auth-orange font-bold underline">9998</span> -->
+      <ClientOnly>
+        <AnimatedCounter :value="998" :duration="100" class="counter" />
+      </ClientOnly>
       کارگاه از کات سایز استفاده میکنند
     </h4>
   </section>
@@ -92,5 +98,8 @@ const { title, welcome, register, headInBottom, showTitle } = defineProps({
 <style scoped>
 :deep(.formkit-form) {
   @apply mt-20;
+}
+.counter {
+  @apply text-auth-orange font-bold underline;
 }
 </style>

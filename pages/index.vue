@@ -13,5 +13,3 @@
     <MainElementsSupport />
   </NuxtLayout>
 </template>
-
-<script setup></script>
