@@ -25,10 +25,19 @@
         <button class="bg-auth-orange rounded-md px-5 py-3">
           دانلود اپلیکیشن
         </button>
-        <button class="border-auth-orange border-2 rounded-md px-5 py-3">
-          ورود پنل کارگاه
+        <ClientOnly>
+        <button v-if="!auth" class="border-auth-orange border-2 rounded-md px-5 py-3">
+          <NuxtLink to="/auth/login"> ورود پنل کارگاه </NuxtLink>
         </button>
+        <button v-else class="border-auth-orange border-2 rounded-md px-5 py-3">
+          <NuxtLink to="/order/order-list"> ورود پنل کارگاه </NuxtLink>
+        </button>
+      </ClientOnly>
       </div>
     </div>
   </nav>
 </template>
+
+<script setup>
+const auth = useAuth();
+</script>

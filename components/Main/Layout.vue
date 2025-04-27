@@ -1,5 +1,13 @@
 <template>
   <main class="space-y-5">
+    <UtilsPopup
+      v-if="!auth.name || !auth.address"
+      width="400"
+      :modal-active="true"
+    >
+      <AuthInformation />
+    </UtilsPopup>
+    
     <header
       class="flex w-full shadow-md h-28 px-8 justify-between items-center bg-gradient-to-t from-auth-gray to-auth-kerem"
     >
@@ -13,7 +21,10 @@
           <IconsAvatar />
 
           <span class="text-auth-blue"
-            >مجموعه <span class="font-black">پویا برش</span></span
+            >مجموعه
+            <span v-if="auth" class="font-black">
+              {{ auth.name }}
+            </span></span
           >
         </div>
 
@@ -21,7 +32,7 @@
           @click="togglePopup"
           class="flex cursor-pointer items-center gap-2"
         >
-          <IconsEdge class="w-6 h-6"/>
+          <IconsEdge class="w-6 h-6" />
 
           <span class="text-auth-blue font-bold">تعیین لبه ها</span>
         </div>
@@ -33,14 +44,20 @@
 
       <!-- details -->
       <div class="flex text-lg text-auth-blue items-center gap-5">
-        <span>کد کارگاه: <span class="font-black">1234567</span></span>
+        <span
+          >کد کارگاه:
+          <span class="font-black" v-if="auth"> {{ auth.code }}</span></span
+        >
 
         <button class="flex font-semibold items-center gap-2">
           <IconsBell />
 
           پیام ها
         </button>
-        <button class="flex font-black items-center gap-2">
+        <button
+          @click="handleLogout"
+          class="flex font-black items-center gap-2"
+        >
           <IconsLogout />
 
           خروج از حساب
@@ -71,9 +88,25 @@ const { title, crumbItems } = defineProps({
   crumbItems: Array,
 });
 
+const auth = useAuth();
+
 const show_edge = ref(false);
 const togglePopup = () => {
   show_edge.value = !show_edge.value;
   document.querySelector("body").classList.add("overflow-hidden");
+};
+
+const handleLogout = async () => {
+  try {
+    await $fetch("/api/auth/logout", {
+      method: "DELETE",
+      header: useRequestHeaders(["cookie"]),
+    });
+
+    await navigateTo("/");
+    auth.value = null;
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>

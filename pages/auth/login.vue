@@ -15,9 +15,13 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: "auth",
+});
 // const step = ref(1);
 const phone_number = usePhoneNumber();
 const loading = useLoading();
+const auth = useAuth();
 
 const handleLogin = async (body) => {
   loading.value = true;
@@ -30,7 +34,11 @@ const handleLogin = async (body) => {
 
     // phone_number.value = body.phone_number;
     // step.value = 2;
-    navigateTo("/");
+    const data = await $fetch("/api/auth/me");
+
+    auth.value = data;
+
+    navigateTo("/order/order-list");
   } catch (error) {
     console.log(error);
   } finally {

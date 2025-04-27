@@ -1,5 +1,11 @@
 <template>
-    <div>
-        <MainOrderList />
-    </div>
+  <div>
+    <MainOrderList />
+  </div>
 </template>
+
+<script setup>
+definePageMeta({
+  middleware: "guest",
+});
+</script>

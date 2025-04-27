@@ -18,18 +18,18 @@
 
 <script setup>
 const items = ref([
-//   {
-//     alt: "avadhoverii",
-//     src: "img/machine/avadhoverii.webp",
-//   },
-//   {
-//     alt: "biessehoverii",
-//     src: "img/machine/biessehoverii.webp",
-//   },
-//   {
-//     alt: "EXCITECHHOVER",
-//     src: "img/machine/EXCITECHHOVER.webp",
-//   },
+  //   {
+  //     alt: "avadhoverii",
+  //     src: "img/machine/avadhoverii.webp",
+  //   },
+  //   {
+  //     alt: "biessehoverii",
+  //     src: "img/machine/biessehoverii.webp",
+  //   },
+  //   {
+  //     alt: "EXCITECHHOVER",
+  //     src: "img/machine/EXCITECHHOVER.webp",
+  //   },
   {
     alt: "holzherhover",
     src: "img/machine/holzherhover.webp",

@@ -69,6 +69,7 @@
 <script setup>
 const timer = ref(null);
 const otp = ref();
+const auth = useAuth();
 
 const phone_number = usePhoneNumber();
 
@@ -94,7 +95,11 @@ const handleActivation = async () => {
       body: { ...inputs, phone_number: phone_number.value },
     });
 
-    navigateTo("/");
+    const data = await $fetch("/api/auth/me");
+
+    auth.value = data;
+
+    navigateTo("/order/order-list");
   } catch (error) {
     console.log("Error fetching data");
   } finally {

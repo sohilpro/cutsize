@@ -8,7 +8,10 @@
       class="flex flex-col gap-[4.5rem] justify-center items-center"
       :class="{ 'mt-20': headInBottom }"
     >
-      <h4 v-if="!headInBottom" class="text-white items-center flex gap-2 text-4xl font-semibold">
+      <h4
+        v-if="!headInBottom"
+        class="text-white items-center flex gap-2 text-4xl font-semibold"
+      >
         در حال حاضر
         <!-- <span class="text-auth-orange font-bold underline">9998</span> -->
         <ClientOnly>

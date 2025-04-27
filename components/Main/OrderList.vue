@@ -6,6 +6,7 @@
     <div
       class="border overflow-x-auto h-screen px-2.5 py-1.5 rounded-md flex flex-col gap-2.5"
     >
+      <UtilsLoader v-if="loading" />
       <div
         class="flex text-auth-blue items-center divide-x-reverse divide-x divide-auth-blue gap-5"
       >
@@ -58,14 +59,14 @@
         <!-- Table Body -->
         <tbody>
           <tr
-            v-for="(item, index) in data"
+            v-for="(item, index) in orderList.results"
             :key="index"
             class="text-gray-800"
-            :class="item.read ? 'bg-green-500/10' : 'bg-orange-500/10'"
           >
+            <!-- :class="item.read ? 'bg-green-500/10' : 'bg-orange-500/10'" -->
             <!-- Row Number -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-              {{ index + 1 }}
+              {{ item.id }}
             </td>
 
             <!-- Read Status -->
@@ -83,14 +84,14 @@
 
             <!-- Status -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-             <IconsPrintShow class="inline cursor-pointer"/>
+              <IconsPrintShow class="inline cursor-pointer" />
             </td>
 
             <!-- Project Name -->
             <td
               class="border border-gray-300 px-4 py-2 font-bold truncate max-w-[150px]"
             >
-              {{ item.project }}
+              {{ item.name }}
             </td>
 
             <!-- Count -->
@@ -112,7 +113,8 @@
                 icon-color-off="#EC4444"
                 track-color-on="#22C55E"
                 track-color-off="#EC4444"
-                v-model="item.locked"
+                v-model="item.is_lock"
+                @click="handleLocked({ id: item.id, value: !item.is_lock })"
               />
             </td>
 
@@ -126,7 +128,7 @@
                 :value="frameworks[0].value"
                 placeholder="Example placeholder"
                 :options="frameworks"
-                :disabled="!item.locked"
+                :disabled="!item.is_lock"
               >
                 <template #option="{ option, classes }">
                   <div :class="`${classes.option} flex items-center`">
@@ -143,12 +145,12 @@
               </FormKit>
 
               <IconsDownloadOff
-                v-if="!item.locked"
-                :class="{ 'cursor-pointer': item.locked }"
+                v-if="!item.is_lock"
+                :class="{ 'cursor-pointer': item.is_lock }"
               />
               <IconsDownloadOn
-                v-if="item.locked"
-                :class="{ 'cursor-pointer': item.locked }"
+                v-if="item.is_lock"
+                :class="{ 'cursor-pointer': item.is_lock }"
               />
             </td>
           </tr>
@@ -180,6 +182,40 @@ const data = ref([
     options: ["OPTICUT", "CUTMASTER", "EXCEL", "WINCAM"],
   },
 ]);
+
+const loading = useLoading();
+
+const { data: orderList } = await useFetch("/api/workshop/panel/shared-panel");
+
+const handleLocked = async ({ id, value }) => {
+  if (value) {
+    loading.value = true;
+    try {
+      await $fetch("/api/workshop/user/lock-panel", {
+        method: "POST",
+        query: { id },
+        header: useRequestHeaders(["cookie"]),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      loading.value = false;
+    }
+  } else {
+    loading.value = true;
+    try {
+      await $fetch("/api/workshop/user/unlock-panel", {
+        method: "DELETE",
+        query: { id },
+        header: useRequestHeaders(["cookie"]),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      loading.value = false;
+    }
+  }
+};
 
 const frameworks = [
   {
