@@ -1,13 +1,14 @@
 <template>
   <main class="space-y-5">
+    <UtilsLoader v-if="!auth || !auth.name || !auth.address" />
     <UtilsPopup
-      v-if="!auth.name || !auth.address"
+      v-else-if="!auth.name || !auth.address"
       width="400"
       :modal-active="true"
     >
       <AuthInformation />
     </UtilsPopup>
-    
+
     <header
       class="flex w-full shadow-md h-28 px-8 justify-between items-center bg-gradient-to-t from-auth-gray to-auth-kerem"
     >

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <MainLayoutNavBar />
-    <slot />
-    <MainLayoutFooter />
+      <MainLayoutNavBar />
+      <slot />
+      <MainLayoutFooter />
   </div>
 </template>
