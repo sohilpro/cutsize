@@ -55,6 +55,8 @@ const handleResendOtp = async () => {
       method: "POST",
       body: { phone_number: phone_number.value },
     });
+
+    useNuxtApp().$toast.info("کد تایید دوباره ارسال شد.");
   } catch (error) {
     console.log("Error fetching data");
     emit("endTime", true);

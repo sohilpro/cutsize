@@ -4,7 +4,6 @@
   title="لیست سفارشهای مشتری"
   :crumb-items="[{ name: 'جزییات سفارش', url: '/' }]"
   >
-  <ClientOnly>
     <div
       class="border overflow-x-auto h-screen px-2.5 py-1.5 rounded-md flex flex-col gap-2.5"
     >
@@ -159,7 +158,6 @@
         </tbody>
       </table>
     </div>
-  </ClientOnly>
   </MainLayout>
 </template>
 

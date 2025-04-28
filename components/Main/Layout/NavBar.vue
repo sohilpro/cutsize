@@ -26,13 +26,17 @@
           دانلود اپلیکیشن
         </button>
         <ClientOnly>
-        <button v-if="!auth" class="border-auth-orange border-2 rounded-md px-5 py-3">
-          <NuxtLink to="/auth/login"> ورود پنل کارگاه </NuxtLink>
-        </button>
-        <button v-else class="border-auth-orange border-2 rounded-md px-5 py-3">
-          <NuxtLink to="/order/order-list"> ورود پنل کارگاه </NuxtLink>
-        </button>
-      </ClientOnly>
+          <NuxtLink v-if="!auth" to="/auth/login">
+            <button class="border-auth-orange border-2 rounded-md px-5 py-3">
+              ورود پنل کارگاه
+            </button>
+          </NuxtLink>
+          <NuxtLink v-else to="/order/order-list">
+            <button class="border-auth-orange border-2 rounded-md px-5 py-3">
+              ورود پنل کارگاه
+            </button>
+          </NuxtLink>
+        </ClientOnly>
       </div>
     </div>
   </nav>

@@ -99,7 +99,8 @@ const handleActivation = async () => {
 
     auth.value = data;
 
-    navigateTo("/order/order-list");
+    await navigateTo("/order/order-list");
+    useNuxtApp().$toast.success("خوش آمدید.");
   } catch (error) {
     console.log("Error fetching data");
   } finally {

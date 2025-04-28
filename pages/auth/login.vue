@@ -38,7 +38,9 @@ const handleLogin = async (body) => {
 
     auth.value = data;
 
-    navigateTo("/order/order-list");
+    
+    await navigateTo("/order/order-list");
+    useNuxtApp().$toast.success("خوش برگشتید.");
   } catch (error) {
     console.log(error);
   } finally {

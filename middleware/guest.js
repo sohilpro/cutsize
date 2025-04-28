@@ -1,7 +1,8 @@
 export default defineNuxtRouteMiddleware(() => {
   const auth = useAuth();
-  
-  if (!auth.value) {
-    return navigateTo("/auth/login");
+  if (import.meta.client) {
+    if (!auth.value) {
+      return navigateTo("/auth/login");
+    }
   }
 });

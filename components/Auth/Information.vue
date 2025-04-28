@@ -102,7 +102,8 @@ const handlInformation = async () => {
     });
 
     auth.value = data;
-    navigateTo("/order/order-list");
+    await navigateTo("/order/order-list");
+    useNuxtApp().$toast.success("تبریک میگم حساب شما فعال شد.");
   } catch (error) {
     auth.value = null;
     console.log(error);

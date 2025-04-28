@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-// definePageMeta({
-//   middleware: "guest",
-// });
+definePageMeta({
+  middleware: "guest",
+});
 </script>

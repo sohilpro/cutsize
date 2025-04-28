@@ -152,6 +152,7 @@ const handleSendOtp = async () => {
     });
 
     state.enableInputOtp = true;
+    useNuxtApp().$toast.info("کد تایید را وارد کنید.");
   } catch (error) {
     console.log("Error fetching data");
   } finally {
