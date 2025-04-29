@@ -85,7 +85,7 @@
 
               <div class="flex flex-col gap-2">
                 <h6 class="text-2xl">هزینه معقول</h6>
-                <p class="text-xl text-black/60">ارش بالا با قیمت معقول</p>
+                <p class="text-xl text-black/60">ارزش بالا با قیمت معقول</p>
               </div>
             </div>
           </li>

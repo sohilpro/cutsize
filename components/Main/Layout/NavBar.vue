@@ -7,7 +7,7 @@
         <h1 class="text-3xl font-extrabold">Cut Size</h1>
       </div>
 
-      <ul class="flex gap-5 font-bold text-md items-center">
+      <ul class="flex gap-10 font-bold text-md items-center">
         <li>
           <NuxtLink to="/"> آموزش ها </NuxtLink>
         </li>
