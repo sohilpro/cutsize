@@ -27,6 +27,7 @@
 html,
 body {
   font-family: "Estedad-VF";
+  scroll-behavior: smooth;
   @apply font-Estedad_VF;
 }
 
@@ -67,45 +68,56 @@ body {
 } */
 
 /** scroll animation  */
-.containerAnime {
-  width: 100%;
-  overflow-x: hidden;
-  max-width: 80rem;
-  margin: 0.5rem auto;
-  height: 100px;
-  mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 1) 20%,
-    rgba(0, 0, 0, 1) 80%,
-    rgba(0, 0, 0, 0)
+.scroller__inner {
+  padding-block: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.scroller[data-animated="true"] {
+  overflow: hidden;
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent,
+    white 20%,
+    white 80%,
+    transparent
   );
+  mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
 }
 
-.containerAnime .itemLeft {
-  width: 200px;
-  height: 100px;
-  border-radius: 15px;
-  position: absolute;
-  animation: 30s linear infinite;
+.scroller[data-animated="true"] .scroller__inner {
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: scroll var(--_animation-duration, 40s)
+    var(--_animation-direction, forwards) linear infinite;
 }
 
-.containerAnime .itemLeft {
-  left: 1600px;
-  animation-name: sLeft;
+.scroller[data-direction="right"] {
+  --_animation-direction: reverse;
 }
 
-@keyframes sLeft {
+.scroller[data-direction="left"] {
+  --_animation-direction: forwards;
+}
+
+.scroller[data-speed="fast"] {
+  --_animation-duration: 20s;
+}
+
+.scroller[data-speed="slow"] {
+  --_animation-duration: 60s;
+}
+
+@keyframes scroll {
   to {
-    left: -0.5rem;
+    transform: translate(calc(-50% - 0.5rem));
   }
 }
 
-.containerAnime .item1 {animation-delay: -26.25s;}
-.containerAnime .item2 {animation-delay: -22.5s;}
-.containerAnime .item3 {animation-delay: -18.75s;}
-.containerAnime .item4 {animation-delay: -15s;}
-.containerAnime .item5 {animation-delay: -11.25s;}
-.containerAnime .item6 {animation-delay: -7.5s;}
-.containerAnime .item7 {animation-delay: -3.75s;}
-.containerAnime .item8 {animation-delay: 0s;}
+.tag-list {
+  margin: 0;
+  padding-inline: 0;
+  list-style: none;
+}

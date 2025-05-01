@@ -6,6 +6,7 @@
       background-repeat: no-repeat;
       background-size: cover;
     "
+    id="benefits"
     class="relative space-y-10 rounded-tr-[110px] overflow-hidden pt-20 pb-5 px-32"
   >
     <main class="flex items-center justify-between">
@@ -79,7 +80,7 @@
               </div>
             </div>
           </li>
-          <li>
+          <!-- <li>
             <div class="flex items-center gap-8">
               <img class="w-14 h-14" src="/img/footer/price.svg" alt="..." />
 
@@ -88,7 +89,7 @@
                 <p class="text-xl text-black/60">ارزش بالا با قیمت معقول</p>
               </div>
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
 

@@ -83,15 +83,17 @@
 </template>
 
 <script setup>
+const { closePopup } = defineProps({
+  closePopup: Function,
+});
 const name = ref();
 const address = ref();
+const auth = useAuth();
 
 const inputs = reactive({
-  name: null,
-  address: null,
+  name: auth.value.name ? auth.value.name : null,
+  address: auth.value.address ? auth.value.address : null,
 });
-
-const auth = useAuth();
 
 const handlInformation = async () => {
   try {
@@ -102,8 +104,9 @@ const handlInformation = async () => {
     });
 
     auth.value = data;
-    await navigateTo("/order/order-list");
-    useNuxtApp().$toast.success("تبریک میگم حساب شما فعال شد.");
+    await navigateTo("/order");
+    closePopup()
+    useNuxtApp().$toast.success("اطلاعات با موفقیت ثبت شد.");
   } catch (error) {
     auth.value = null;
     console.log(error);

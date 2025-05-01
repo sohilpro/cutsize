@@ -13,13 +13,23 @@
       <header
         class="flex w-full shadow-md h-28 px-8 justify-between items-center bg-gradient-to-t from-auth-gray to-auth-kerem"
       >
+        <UtilsPopup
+          width="400"
+          @close="togglePopupInfo"
+          :modal-active="show_info"
+        >
+          <AuthInformation :close-popup="togglePopupInfo"/>
+        </UtilsPopup>
         <div class="flex text-lg items-center gap-5">
           <!-- Logo -->
           <NuxtLink to="/">
             <IconsTopForm class="w-20 h-20" />
           </NuxtLink>
 
-          <div class="flex items-center gap-2">
+          <div
+            @click="togglePopupInfo"
+            class="flex cursor-pointer items-center gap-2"
+          >
             <IconsAvatar />
 
             <span class="text-auth-blue"
@@ -52,7 +62,16 @@
         <div class="flex text-lg text-auth-blue items-center gap-5">
           <span
             >کد کارگاه:
-            <span class="font-black" v-if="auth"> {{ auth.code }}</span></span
+            <span
+              style="
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
+                  sans-serif;
+              "
+              class="font-black"
+              v-if="auth"
+            >
+              {{ auth.code }}</span
+            ></span
           >
 
           <button class="flex font-semibold items-center gap-2">
@@ -100,7 +119,13 @@ const auth = useAuth();
 const show_edge = ref(false);
 const togglePopup = () => {
   show_edge.value = !show_edge.value;
-  document.querySelector("body").classList.add("overflow-hidden");
+  document.querySelector("body").classList.toggle("overflow-hidden");
+};
+
+const show_info = ref(false);
+const togglePopupInfo = () => {
+  show_info.value = !show_info.value;
+  document.querySelector("body").classList.toggle("overflow-hidden");
 };
 
 const handleLogout = async () => {
@@ -111,6 +136,7 @@ const handleLogout = async () => {
     });
 
     await navigateTo("/");
+    useNuxtApp().$toast.error("از حساب خود خارج شدید.");
     auth.value = null;
   } catch (error) {
     console.log(error);

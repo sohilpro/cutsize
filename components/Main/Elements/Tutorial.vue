@@ -1,5 +1,5 @@
 <template>
-  <section class="template_container">
+  <section id="tutorial" class="template_container">
     <main class="flex items-center relative gap-5 w-full">
       <img
         src="/img/tut/bg-vide.svg"

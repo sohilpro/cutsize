@@ -1,8 +1,7 @@
 <template>
-  <!-- <UtilsLoader /> -->
   <MainLayout
-  title="لیست سفارشهای مشتری"
-  :crumb-items="[{ name: 'جزییات سفارش', url: '/' }]"
+    title="لیست سفارشهای مشتری"
+    :crumb-items="[{ name: 'جزییات سفارش', url: '/' }]"
   >
     <div
       class="border overflow-x-auto h-screen px-2.5 py-1.5 rounded-md flex flex-col gap-2.5"
@@ -85,7 +84,10 @@
 
             <!-- Status -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-              <IconsPrintShow class="inline cursor-pointer" />
+              <NuxtLink :to="`/order/details/${item.id}`">
+
+                <IconsPrintShow class="inline cursor-pointer" />
+              </NuxtLink>
             </td>
 
             <!-- Project Name -->
@@ -102,7 +104,7 @@
 
             <!-- Date -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-              {{ item.date }}
+              {{ format(item.shared_at, "yyyy/M/dd") }}
             </td>
 
             <!-- Lock -->
@@ -127,7 +129,7 @@
                 type="dropdown"
                 name="framework"
                 :value="frameworks[0].value"
-                placeholder="Example placeholder"
+                placeholder="OPTICUT"
                 :options="frameworks"
                 :disabled="!item.is_lock"
               >
@@ -151,6 +153,7 @@
               />
               <IconsDownloadOn
                 v-if="item.is_lock"
+                @click="handleDownloadLink(item)"
                 :class="{ 'cursor-pointer': item.is_lock }"
               />
             </td>
@@ -162,27 +165,33 @@
 </template>
 
 <script setup>
+import { format } from "date-fns-jalali";
+
 const testI =
   '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="m7.306 7.758l.343 3.088l-.694.055a2.11 2.11 0 0 0-1.915 1.764a20.6 20.6 0 0 0 0 6.67A2.11 2.11 0 0 0 6.955 21.1l1.496.12c2.362.188 4.736.188 7.098 0l1.496-.12a2.11 2.11 0 0 0 1.915-1.764a20.6 20.6 0 0 0 0-6.67a2.11 2.11 0 0 0-1.915-1.764l-.694-.055l.343-3.088q.06-.548 0-1.095l-.023-.205a4.7 4.7 0 0 0-9.342 0l-.023.205a5 5 0 0 0 0 1.095M12.374 3.8A3.2 3.2 0 0 0 8.82 6.624l-.023.205a3.5 3.5 0 0 0 0 .764l.349 3.139c1.9-.122 3.807-.122 5.708 0l.349-3.14a3.5 3.5 0 0 0 0-.763l-.023-.205a3.2 3.2 0 0 0-2.806-2.825M12 14.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>';
 
-const data = ref([
+const frameworks = [
   {
-    read: true,
-    project: "پنل افقی قفسه",
-    count: 44,
-    date: "1405/01/27",
-    locked: true,
-    options: ["OPTICUT", "CUTMASTER", "EXCEL", "WINCAM"],
+    label: "OPTICUT",
+    value: "apt-cut",
+    asset: "/Icons/apt-cut.png",
   },
   {
-    read: false,
-    project: "پنل عمودی قفسه",
-    count: 44,
-    date: "1405/02/01",
-    locked: false,
-    options: ["OPTICUT", "CUTMASTER", "EXCEL", "WINCAM"],
+    label: "Cut Master",
+    value: "cut-master",
+    asset: "/Icons/cut-master.png",
   },
-]);
+  {
+    label: "Wincam",
+    value: "wincam",
+    asset: "/Icons/wincam.png",
+  },
+  {
+    label: "Excel",
+    value: "excel",
+    asset: "/Icons/excel.png",
+  },
+];
 
 const loading = useLoading();
 
@@ -218,28 +227,18 @@ const handleLocked = async ({ id, value }) => {
   }
 };
 
-const frameworks = [
-  {
-    label: "OPTICUT",
-    value: "apt-cut",
-    asset: "/Icons/apt-cut.png",
-  },
-  {
-    label: "Cut Master",
-    value: "cut-master",
-    asset: "/Icons/cut-master.png",
-  },
-  {
-    label: "Wincam",
-    value: "wincam",
-    asset: "/Icons/wincam.png",
-  },
-  {
-    label: "Excel",
-    value: "excel",
-    asset: "/Icons/excel.png",
-  },
-];
+const handleDownloadLink = (item) => {
+  console.log(item);
+
+  return;
+  const selected = item.selectedFormat;
+  const link = item.files[selected];
+  if (link) {
+    window.open(link, "_blank");
+  } else {
+    alert("File not available");
+  }
+};
 </script>
 
 <style scoped>

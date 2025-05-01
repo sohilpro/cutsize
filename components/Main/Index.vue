@@ -1,5 +1,5 @@
 <template>
-  <MainLayout title="سفارش ها" :crumb-items="[{ name: 'سفارش ها', url: '/' }]">
+  <MainLayout title="مشتری ها" :crumb-items="[{ name: 'مشتری ها', url: '/' }]">
     <div class="flex flex-col gap-2">
       <div class="border px-2.5 py-1.5 rounded-md flex flex-col gap-2.5">
         <label for="search" class="text-auth-blue font-semibold">
