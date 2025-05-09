@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       api: "https://api.cutsize.ir",
+      socket_URI: "wss://api.cutsize.ir/ws",
     },
   },
 
