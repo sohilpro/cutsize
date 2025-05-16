@@ -1,14 +1,14 @@
 <template>
   <ClientOnly>
     <main class="space-y-5">
-      <UtilsLoader v-if="!auth || !auth.name || !auth.address" />
       <UtilsPopup
-        v-else-if="!auth.name || !auth.address"
+        v-if="!auth || !auth.name || !auth.address"
         width="400"
         :modal-active="true"
       >
         <AuthInformation />
       </UtilsPopup>
+      <UtilsLoader v-else-if="!auth || !auth.name || !auth.address" />
 
       <header
         class="flex w-full shadow-md h-28 px-8 justify-between items-center bg-gradient-to-t from-auth-gray to-auth-kerem"
@@ -18,7 +18,7 @@
           @close="togglePopupInfo"
           :modal-active="show_info"
         >
-          <AuthInformation :close-popup="togglePopupInfo"/>
+          <AuthInformation :close-popup="togglePopupInfo" />
         </UtilsPopup>
         <div class="flex text-lg items-center gap-5">
           <!-- Logo -->
@@ -54,7 +54,7 @@
             @close="togglePopup"
             :modal-active="show_edge"
           >
-            <MainEdgeInfo />
+            <MainEdgeInfo :close="togglePopup" ref="edge" />
           </UtilsPopup>
         </div>
 
@@ -80,13 +80,50 @@
             پیام ها
           </button>
           <button
-            @click="handleLogout"
+            @click="handleLogoutPopup"
             class="flex font-black items-center gap-2"
           >
             <IconsLogout />
 
             خروج از حساب
           </button>
+
+          <UtilsPopup
+            width="520"
+            @close="handleLogoutPopup"
+            :modal-active="show_logout"
+          >
+            <div
+              class="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 flex items-center justify-center"
+            >
+              <IconsLogout class="w-16 h-16" />
+            </div>
+
+            <div class="flex flex-col gap-5">
+              <div class="mt-5">
+                <h6 class="text-xl font-extrabold">خروج از حساب کاربری</h6>
+                <p>
+                  با خروج از حساب کاربری دیگر به داشبورد دسترسی نخواهید داشت
+                  <br />هر وقت بخواهید میتوانید مجدد وارد شوید.
+                </p>
+              </div>
+
+              <div class="flex items-center gap-3 justify-center">
+                <button
+                  @click="handleLogoutPopup"
+                  class="text-red-500 border border-red-500 rounded-lg py-2 px-5"
+                >
+                  انصراف
+                </button>
+                <button
+                  @click="handleLogout"
+                  class="text-white bg-red-500 rounded-lg py-2 px-5"
+                >
+                  خروج
+                </button>
+              </div>
+            </div>
+          </UtilsPopup>
         </div>
       </header>
 
@@ -116,8 +153,10 @@ const { title, crumbItems } = defineProps({
 
 const auth = useAuth();
 
+const edge = ref(null);
 const show_edge = ref(false);
 const togglePopup = () => {
+  edge.value.getDataEdge();
   show_edge.value = !show_edge.value;
   document.querySelector("body").classList.toggle("overflow-hidden");
 };
@@ -125,6 +164,12 @@ const togglePopup = () => {
 const show_info = ref(false);
 const togglePopupInfo = () => {
   show_info.value = !show_info.value;
+  document.querySelector("body").classList.toggle("overflow-hidden");
+};
+
+const show_logout = ref(false);
+const handleLogoutPopup = () => {
+  show_logout.value = !show_logout.value;
   document.querySelector("body").classList.toggle("overflow-hidden");
 };
 
@@ -137,6 +182,7 @@ const handleLogout = async () => {
 
     await navigateTo("/");
     useNuxtApp().$toast.error("از حساب خود خارج شدید.");
+    reloadNuxtApp();
     auth.value = null;
   } catch (error) {
     console.log(error);

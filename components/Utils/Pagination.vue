@@ -1,21 +1,19 @@
 <template>
-  <div
-    class="flex select-none items-center justify-center space-x-2 rtl:space-x-reverse"
-  >
-    <!-- Previous Button (Left for RTL) -->
+  <div class="flex items-center justify-center space-x-2 rtl:space-x-reverse select-none">
+    <!-- Previous Button -->
     <button
-      class="px-2 py-1 border border-auth-blue text-auth-blue hhover:bg-auth-blue/10 transition"
+      class="px-2 py-1 border border-auth-blue text-auth-blue hover:bg-auth-blue/10 transition"
       :disabled="currentPage === 1"
-      @click="prevPage"
+      @click="emitPrevPage"
     >
-    <IconsLeft class="rotate-180"/>
+      <IconsLeft class="rotate-180" />
     </button>
 
     <!-- Page Numbers -->
     <button
       v-for="page in visiblePages"
       :key="page"
-      @click="goToPage(page)"
+      @click="$emit('update:page', page)"
       :class="[
         'px-3 py-1 border font-semibold transition',
         currentPage === page
@@ -29,66 +27,55 @@
     <!-- Ellipsis -->
     <span v-if="totalPages > 5 && currentPage < totalPages - 2">...</span>
 
-    <!-- Next Button (Right for RTL) -->
+    <!-- Next Button -->
     <button
       class="px-2 py-1 border border-auth-blue text-auth-blue hover:bg-auth-blue/10 transition"
       :disabled="currentPage === totalPages"
-      @click="nextPage"
+      @click="emitNextPage"
     >
-    <IconsLeft />
+      <IconsLeft />
     </button>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+const props = defineProps({
+  currentPage: Number,
+  totalPages: Number,
+})
 
-const currentPage = ref(1);
-const totalPages = ref(10); // Example: total pages
+const emit = defineEmits(['update:page'])
 
 const visiblePages = computed(() => {
-  if (totalPages.value <= 5) {
-    return Array.from({ length: totalPages.value }, (_, i) => i + 1);
+  if (props.totalPages <= 5) {
+    return Array.from({ length: props.totalPages }, (_, i) => i + 1)
   }
-
-  if (currentPage.value <= 3) {
-    return [1, 2, 3, 4, 5];
+  if (props.currentPage <= 3) {
+    return [1, 2, 3, 4, 5]
   }
-
-  if (currentPage.value >= totalPages.value - 2) {
+  if (props.currentPage >= props.totalPages - 2) {
     return [
-      totalPages.value - 4,
-      totalPages.value - 3,
-      totalPages.value - 2,
-      totalPages.value - 1,
-      totalPages.value,
-    ];
+      props.totalPages - 4,
+      props.totalPages - 3,
+      props.totalPages - 2,
+      props.totalPages - 1,
+      props.totalPages,
+    ]
   }
-
   return [
-    currentPage.value - 2,
-    currentPage.value - 1,
-    currentPage.value,
-    currentPage.value + 1,
-    currentPage.value + 2,
-  ];
-});
+    props.currentPage - 2,
+    props.currentPage - 1,
+    props.currentPage,
+    props.currentPage + 1,
+    props.currentPage + 2,
+  ]
+})
 
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-  }
-};
+function emitPrevPage() {
+  if (props.currentPage > 1) emit('update:page', props.currentPage - 1)
+}
 
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
-
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-};
+function emitNextPage() {
+  if (props.currentPage < props.totalPages) emit('update:page', props.currentPage + 1)
+}
 </script>

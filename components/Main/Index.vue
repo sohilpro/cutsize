@@ -53,8 +53,7 @@
             </div>
           </div>
         </div>
-
-        <div class="flex items-end gap-10">
+        <div v-if="received" class="flex items-end gap-10">
           <table class="w-full border-collapse border border-gray-300">
             <thead class="bg-auth-blue text-white">
               <tr>
@@ -66,15 +65,15 @@
             </thead>
             <tbody>
               <tr
-                v-for="(customer, index) in customers"
+                v-for="(client, index) in received.data.clients"
                 :key="index"
-                :class="customer.read ? 'bg-green-500/10' : 'bg-orange-500/10'"
+                :class="client.seen ? 'bg-green-500/10' : 'bg-orange-500/10'"
               >
                 <td class="border border-gray-300 px-4 py-2 text-center">
-                  {{ index + 1 }}
+                  {{ client.id }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2 text-center">
-                  <span v-if="customer.read" class="flex justify-center">
+                  <span v-if="client.seen" class="flex justify-center">
                     <i class="text-green-600 text-xl">
                       <IconsRead class="w-10 h-10" />
                     </i>
@@ -88,18 +87,22 @@
                 <td
                   class="border text-auth-sky border-gray-300 px-4 py-2 text-center font-bold"
                 >
-                  {{ customer.name }}
+                  {{ client.name }}
                 </td>
                 <td
                   class="border text-auth-sky font-bold border-gray-300 px-4 py-2 text-center"
                 >
-                  {{ customer.mobile }}
+                  {{ client.phone_number }}
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <UtilsPagination />
+          <UtilsPagination
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            @update:page="onPageChange"
+          />
         </div>
       </div>
     </div>
@@ -127,12 +130,82 @@ const options = ref([
   },
 ]);
 
-const customers = ref([
-  { name: "سپاهان چوب", mobile: "09993744332", read: true },
-  { name: "ویرا پارسه", mobile: "09993744331", read: false },
-  { name: "", mobile: "", read: false },
-  { name: "", mobile: "", read: false },
-]);
+const received = ref(null);
+const currentPage = ref(1);
+const limit = 10;
+const offset = ref(10); // First offset is 10
+const totalPages = ref(1);
+
+let socket;
+
+const {
+  public: { socket_URI },
+} = useRuntimeConfig();
+const token = useCookie("token").value;
+const socketUrl = `${socket_URI}/clients?token=${encodeURIComponent(token)}`;
+
+onMounted(() => {
+  socket = new WebSocket(socketUrl);
+
+  socket.addEventListener("open", () => {
+    console.log("✅ Connected");
+    sendPaginationRequest();
+  });
+
+  socket.addEventListener("message", (event) => {
+    try {
+      const data = JSON.parse(event.data);
+
+      if (Array.isArray(data.clients)) {
+        received.value = {
+          type: "connection_established",
+          message: "You are now connected.",
+          data: { ...data },
+        };
+      } else {
+        received.value = data;
+      }
+
+      if (data.next_page) {
+        offset.value = data.next_page.offset;
+        totalPages.value = Math.ceil(offset.value / limit);
+      }
+    } catch (e) {
+      console.error("❌ JSON parse error:", e);
+    }
+  });
+
+  socket.addEventListener("error", (err) => {
+    console.error("❌ WebSocket error:", err);
+  });
+
+  socket.addEventListener("close", () => {
+    console.log("🔌 Connection closed");
+  });
+});
+
+onBeforeUnmount(() => {
+  socket?.close();
+});
+
+function sendPaginationRequest() {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    const offset = 10 + (currentPage.value - 1) * limit;
+
+    const payload = {
+      type: "next_clients_page",
+      limit,
+      offset,
+    };
+    socket.send(JSON.stringify(payload));
+  }
+}
+
+// Handle pagination event from child
+function onPageChange(newPage) {
+  currentPage.value = newPage;
+  sendPaginationRequest();
+}
 </script>
 
 <style scoped>

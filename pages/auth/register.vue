@@ -32,7 +32,7 @@ const handleRegister = async (body) => {
   try {
     await $fetch("/api/auth/register", {
       method: "POST",
-      body,
+      body: { type: "C", ...body },
     });
 
     phone_number.value = body.phone_number;
