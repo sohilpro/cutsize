@@ -74,11 +74,25 @@
             ></span
           >
 
-          <button class="flex font-semibold items-center gap-2">
-            <IconsBell />
+          <div
+            v-click-outside="() => (showNotification = false)"
+            class="relative"
+          >
+            <button
+              @click="() => (showNotification = !showNotification)"
+              class="flex font-semibold items-center gap-2"
+            >
+              <IconsBell />
 
-            پیام ها
-          </button>
+              پیام ها
+            </button>
+
+            <MainNotification
+              @close="() => (showNotification = false)"
+              v-show="showNotification"
+            />
+          </div>
+
           <button
             @click="handleLogoutPopup"
             class="flex font-black items-center gap-2"
@@ -153,6 +167,7 @@ const { title, crumbItems } = defineProps({
 
 const auth = useAuth();
 
+const showNotification = ref(false);
 const edge = ref(null);
 const show_edge = ref(false);
 const togglePopup = () => {

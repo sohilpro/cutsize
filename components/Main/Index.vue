@@ -68,6 +68,8 @@
                 v-for="(client, index) in received.data.clients"
                 :key="index"
                 :class="client.seen ? 'bg-green-500/10' : 'bg-orange-500/10'"
+                @click="() => navigateTo(`/order/${client.id}`)"
+                class="cursor-pointer hover:opacity-70 transition-all"
               >
                 <td class="border border-gray-300 px-4 py-2 text-center">
                   {{ client.id }}

@@ -57,9 +57,9 @@
         </thead>
 
         <!-- Table Body -->
-        <tbody>
+        <tbody v-if="received">
           <tr
-            v-for="(item, index) in orderList.results"
+            v-for="(item, index) in received.data.panels.items"
             :key="index"
             class="text-gray-800"
           >
@@ -72,7 +72,7 @@
             <!-- Read Status -->
             <td class="border border-gray-300 px-4 py-2 text-center">
               <span
-                v-if="item.read"
+                v-if="item.seen"
                 class="text-green-600 text-xl flex justify-center"
               >
                 <IconsRead class="w-10 h-10" />
@@ -85,7 +85,6 @@
             <!-- Status -->
             <td class="border border-gray-300 px-4 py-2 text-center">
               <NuxtLink :to="`/order/details/${item.id}`">
-
                 <IconsPrintShow class="inline cursor-pointer" />
               </NuxtLink>
             </td>
@@ -99,12 +98,12 @@
 
             <!-- Count -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-              {{ item.count }}
+              {{ item.item_count }}
             </td>
 
             <!-- Date -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-              {{ format(item.shared_at, "yyyy/M/dd") }}
+              {{ format(item.created_at, "yyyy/M/dd") }}
             </td>
 
             <!-- Lock -->
@@ -116,8 +115,14 @@
                 icon-color-off="#EC4444"
                 track-color-on="#22C55E"
                 track-color-off="#EC4444"
-                v-model="item.is_lock"
-                @click="handleLocked({ id: item.id, value: !item.is_lock })"
+                v-model="item.is_locked"
+                @click="
+                  handleLockedUnlocked({
+                    type: 'toggle_panel_lock',
+                    panel_id: item.id,
+                    is_locked: !item.is_locked,
+                  })
+                "
               />
             </td>
 
@@ -128,10 +133,10 @@
               <FormKit
                 type="dropdown"
                 name="framework"
-                :value="frameworks[0].value"
+                v-model="selectedFormat"
                 placeholder="OPTICUT"
                 :options="frameworks"
-                :disabled="!item.is_lock"
+                :disabled="!item.is_locked"
               >
                 <template #option="{ option, classes }">
                   <div :class="`${classes.option} flex items-center`">
@@ -148,13 +153,13 @@
               </FormKit>
 
               <IconsDownloadOff
-                v-if="!item.is_lock"
-                :class="{ 'cursor-pointer': item.is_lock }"
+                v-if="!item.is_locked"
+                :class="{ 'cursor-pointer': item.is_locked }"
               />
               <IconsDownloadOn
-                v-if="item.is_lock"
+                v-if="item.is_locked"
                 @click="handleDownloadLink(item)"
-                :class="{ 'cursor-pointer': item.is_lock }"
+                :class="{ 'cursor-pointer': item.is_locked }"
               />
             </td>
           </tr>
@@ -173,12 +178,12 @@ const testI =
 const frameworks = [
   {
     label: "OPTICUT",
-    value: "apt-cut",
+    value: "opticut",
     asset: "/Icons/apt-cut.png",
   },
   {
     label: "Cut Master",
-    value: "cut-master",
+    value: "cutmaster",
     asset: "/Icons/cut-master.png",
   },
   {
@@ -193,50 +198,78 @@ const frameworks = [
   },
 ];
 
+const selectedFormat = ref("opticut");
 const loading = useLoading();
 
-const { data: orderList } = await useFetch("/api/workshop/panel/shared-panel");
-
-const handleLocked = async ({ id, value }) => {
-  if (value) {
-    loading.value = true;
-    try {
-      await $fetch("/api/workshop/user/lock-panel", {
-        method: "POST",
-        query: { id },
-        header: useRequestHeaders(["cookie"]),
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      loading.value = false;
-    }
-  } else {
-    loading.value = true;
-    try {
-      await $fetch("/api/workshop/user/unlock-panel", {
-        method: "DELETE",
-        query: { id },
-        header: useRequestHeaders(["cookie"]),
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      loading.value = false;
-    }
-  }
-};
-
 const handleDownloadLink = (item) => {
-  console.log(item);
-
-  return;
-  const selected = item.selectedFormat;
+  const selected = selectedFormat.value;
   const link = item.files[selected];
   if (link) {
     window.open(link, "_blank");
   } else {
     alert("File not available");
+  }
+};
+
+const received = ref(null);
+const currentPage = ref(1);
+const limit = 10;
+const offset = ref(10); // First offset is 10
+const totalPages = ref(1);
+
+let socket;
+
+const {
+  public: { socket_URI },
+} = useRuntimeConfig();
+const token = useCookie("token").value;
+const route = useRoute();
+const socketUrl = `${socket_URI}/panels/${
+  route.params.id
+}?token=${encodeURIComponent(token)}`;
+
+onMounted(() => {
+  socket = new WebSocket(socketUrl);
+
+  socket.addEventListener("open", () => {
+    console.log("✅ Connected");
+  });
+
+  socket.addEventListener("message", (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      if (data.type == "panel_lock_toggled") return;
+      if (Array.isArray(data.clients)) {
+        received.value = {
+          type: "connection_established",
+          message: "You are now connected.",
+          data: { ...data },
+        };
+      } else {
+        received.value = data;
+      }
+
+      if (data.next_page) {
+        offset.value = data.next_page.offset;
+        totalPages.value = Math.ceil(offset.value / limit);
+      }
+    } catch (e) {
+      console.error("❌ JSON parse error:", e);
+    }
+  });
+
+  socket.addEventListener("error", (err) => {
+    console.error("❌ WebSocket error:", err);
+  });
+
+  socket.addEventListener("close", () => {
+    console.log("🔌 Connection closed");
+  });
+});
+
+const handleLockedUnlocked = async (payload) => {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(payload));
   }
 };
 </script>
