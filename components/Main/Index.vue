@@ -53,6 +53,9 @@
             </div>
           </div>
         </div>
+        <!-- <pre>
+          {{ received.data.clients }}
+      </pre> -->
         <div v-if="received" class="flex items-end gap-10">
           <table class="w-full border-collapse border border-gray-300">
             <thead class="bg-auth-blue text-white">
@@ -65,13 +68,22 @@
             </thead>
             <tbody>
               <tr
-                v-for="(client, index) in received.data.clients"
+                v-for="(client, index) in received.data.clients.items"
                 :key="index"
                 :class="client.seen ? 'bg-green-500/10' : 'bg-orange-500/10'"
-                @click="() => navigateTo(`/order/${client.id}`)"
+                @click="
+                  handleSeenClients(
+                    {
+                      type: 'mark_client_as_seen',
+                      client_id: client.id,
+                    },
+                    client.id
+                  )
+                "
                 class="cursor-pointer hover:opacity-70 transition-all"
               >
                 <td class="border border-gray-300 px-4 py-2 text-center">
+                  <!-- {{ index + 1 }} -->
                   {{ client.id }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2 text-center">
@@ -135,7 +147,7 @@ const options = ref([
 const received = ref(null);
 const currentPage = ref(1);
 const limit = 10;
-const offset = ref(10); // First offset is 10
+const offset = ref(0); // First offset is 10
 const totalPages = ref(1);
 
 let socket;
@@ -158,18 +170,23 @@ onMounted(() => {
     try {
       const data = JSON.parse(event.data);
 
-      if (Array.isArray(data.clients)) {
-        received.value = {
-          type: "connection_established",
-          message: "You are now connected.",
-          data: { ...data },
-        };
+      if (data.type == "mark_client_as_seen") return;
+      if (data.type == "clients_page") {
+        received.value = data;
       } else {
         received.value = data;
       }
 
-      if (data.next_page) {
-        offset.value = data.next_page.offset;
+      // if (Array.isArray(data.data.clients.items)) {
+      //   received.value = {
+      //     type: "connection_established",
+      //     message: "You are now connected.",
+      //     data: { ...data.data.clients.items },
+      //   };
+      // }
+
+      if (data.data.clients.next_page) {
+        offset.value = data.data.clients.next_page.offset;
         totalPages.value = Math.ceil(offset.value / limit);
       }
     } catch (e) {
@@ -192,16 +209,24 @@ onBeforeUnmount(() => {
 
 function sendPaginationRequest() {
   if (socket && socket.readyState === WebSocket.OPEN) {
-    const offset = 10 + (currentPage.value - 1) * limit;
+    // const offset = 10 + (currentPage.value - 1) * limit;
+    offset.value = limit + (currentPage.value - 1) * limit;
 
     const payload = {
       type: "next_clients_page",
       limit,
-      offset,
+      offset: offset.value,
     };
     socket.send(JSON.stringify(payload));
   }
 }
+
+const handleSeenClients = async (payload, id) => {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(payload));
+  }
+  await navigateTo(`/order/${id}`);
+};
 
 // Handle pagination event from child
 function onPageChange(newPage) {

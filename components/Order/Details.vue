@@ -7,8 +7,13 @@
     ]"
   >
     <div class="flex items-center gap-5 absolute left-10 -top-5">
-      <IconsPrint class="w-40 h-40 cursor-pointer" />
-      <IconsPdfDl class="w-40 h-40 cursor-pointer" />
+      <!-- <IconsPrint class="w-40 h-40 cursor-pointer" /> -->
+      <IconsLoading v-if="loading" class="w-10 h-10 top-0 left-0" />
+      <IconsPdfDl
+        @click="download"
+        :class="{ 'opacity-50': loading }"
+        class="w-40 h-40 cursor-pointer"
+      />
     </div>
 
     <div
@@ -146,8 +151,50 @@ import { format } from "date-fns-jalali";
 import { faIR } from "date-fns-jalali/locale";
 
 const route = useRoute();
+const loading = useLoading();
+const basePdf = ref(null);
 
 const { data } = await useFetch("/api/workshop/panel/order-status", {
   query: { id: route.params.id },
 });
+
+const download = async () => {
+  loading.value = true;
+  try {
+    const dataResponse = await $fetch("/api/pdf/export-pdf", {
+      method: "POST",
+      body: {
+        data: [
+          {
+            ...data.value,
+            sign_up: format(data.value.created_at, "EEEE", { locale: faIR }),
+            clock: format(data.value.created_at, "hh:mm:ss a", {
+              locale: faIR,
+            }),
+            sing_up_time: format(data.value.created_at, "yyyy/M/dd"),
+          },
+        ],
+      },
+    });
+
+    basePdf.value = dataResponse;
+
+    downloadPdf();
+  } catch (error) {
+    console.error("Error render PDF:", error.message);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const downloadPdf = () => {
+  const linkSource = `data:application/pdf;base64,${basePdf.value}`;
+  const randomName = Math.floor(Math.random() * 1e9);
+  const downloadLink = document.createElement("a");
+  const fileName = `file_${randomName}.pdf`;
+  downloadLink.style.display = "hidden";
+  downloadLink.href = linkSource;
+  downloadLink.download = fileName;
+  downloadLink.click();
+};
 </script>

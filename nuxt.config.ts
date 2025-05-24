@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     public: {
       api: "https://api.cutsize.ir",
       socket_URI: "wss://api.cutsize.ir/ws",
+      pdfExport: "http://localhost:5000/download",
     },
   },
 

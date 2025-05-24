@@ -14,14 +14,15 @@
           <IconsCustomers />
 
           <span class="font-bold text-lg"
-            >نام مشتری: <span>سپاهان چوب</span></span
+            >نام مشتری: <span>{{ received.data.client.name }}</span></span
           >
         </div>
         <div class="flex font-semibold pr-5 gap-2 items-center">
           <IconsPhone />
 
           <span class="font-bold text-lg"
-            >شماره تماس: <span> 09309517350 </span></span
+            >شماره تماس:
+            <span> {{ received.data.client.phone_number }} </span></span
           >
         </div>
       </div>
@@ -66,7 +67,7 @@
             <!-- :class="item.read ? 'bg-green-500/10' : 'bg-orange-500/10'" -->
             <!-- Row Number -->
             <td class="border border-gray-300 px-4 py-2 text-center">
-              {{ item.id }}
+              {{ index + 1 }}
             </td>
 
             <!-- Read Status -->
@@ -239,6 +240,10 @@ onMounted(() => {
     try {
       const data = JSON.parse(event.data);
       if (data.type == "panel_lock_toggled") return;
+      if (data.type == "panel_shared") {
+        received.value.unshift(data.client);
+        return;
+      }
       if (Array.isArray(data.clients)) {
         received.value = {
           type: "connection_established",

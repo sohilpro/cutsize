@@ -55,10 +55,10 @@ const items = ref([
     alt: "NAX HOVER",
     src: "img/machine/NAX HOVER.webp",
   },
-  {
-    alt: "Untitled-1HOVER",
-    src: "img/machine/Untitled-1HOVER.webp",
-  },
+  // {
+  //   alt: "Untitled-1HOVER",
+  //   src: "img/machine/Untitled-1HOVER.webp",
+  // },
   {
     alt: "Untitled-2HOVER",
     src: "img/machine/Untitled-2HOVER.webp",

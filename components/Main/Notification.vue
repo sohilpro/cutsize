@@ -15,7 +15,7 @@
         @click="emit('close', false)"
         class="text-orange-500 hover:text-orange-700"
       >
-        ✖
+        <IconsCloseSecond class="w-6 h-6"/>
       </button>
     </div>
 

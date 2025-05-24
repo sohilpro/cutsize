@@ -58,6 +58,33 @@
           </UtilsPopup>
         </div>
 
+        <ul class="flex text-auth-blue gap-10 font-bold text-md items-center">
+          <li>
+            <NuxtLink
+              :to="{ path: '/', hash: '#tutorial' }"
+              class="hover:text-black/70 transition-all duration-300"
+            >
+              آموزش ها
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              :to="{ path: '/', hash: '#benefits' }"
+              class="hover:text-black/70 transition-all duration-300"
+            >
+              مزایای کات سایز
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              to="/contact-us"
+              class="hover:text-black/70 transition-all duration-300"
+            >
+              تماس با ما
+            </NuxtLink>
+          </li>
+        </ul>
+
         <!-- details -->
         <div class="flex text-lg text-auth-blue items-center gap-5">
           <span
