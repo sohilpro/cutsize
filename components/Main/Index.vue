@@ -53,9 +53,7 @@
             </div>
           </div>
         </div>
-        <!-- <pre>
-          {{ received.data.clients }}
-      </pre> -->
+     
         <div v-if="received" class="flex items-end gap-10">
           <table class="w-full border-collapse border border-gray-300">
             <thead class="bg-auth-blue text-white">
@@ -187,7 +185,7 @@ onMounted(() => {
 
       if (data.data.clients.next_page) {
         offset.value = data.data.clients.next_page.offset;
-        totalPages.value = Math.ceil(offset.value / limit);
+        totalPages.value = Math.ceil(offset.value / limit) + 1;
       }
     } catch (e) {
       console.error("❌ JSON parse error:", e);
@@ -210,13 +208,14 @@ onBeforeUnmount(() => {
 function sendPaginationRequest() {
   if (socket && socket.readyState === WebSocket.OPEN) {
     // const offset = 10 + (currentPage.value - 1) * limit;
-    offset.value = limit + (currentPage.value - 1) * limit;
+    const offset = (currentPage.value - 1) * limit;
 
     const payload = {
       type: "next_clients_page",
       limit,
-      offset: offset.value,
+      offset,
     };
+
     socket.send(JSON.stringify(payload));
   }
 }

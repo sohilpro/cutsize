@@ -244,15 +244,15 @@ onMounted(() => {
         received.value.unshift(data.client);
         return;
       }
-      if (Array.isArray(data.clients)) {
-        received.value = {
-          type: "connection_established",
-          message: "You are now connected.",
-          data: { ...data },
-        };
-      } else {
-        received.value = data;
-      }
+      // if (Array.isArray(data.clients)) {
+      //   received.value = {
+      //     type: "connection_established",
+      //     message: "You are now connected.",
+      //     data: { ...data },
+      //   };
+      // } else {
+      received.value = data;
+      // }
 
       if (data.next_page) {
         offset.value = data.next_page.offset;
@@ -276,6 +276,13 @@ const handleLockedUnlocked = async (payload) => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(payload));
   }
+};
+
+const handleSeenPanel = async (payload, id) => {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(payload));
+  }
+  await navigateTo(`/order/details/${id}`);
 };
 </script>
 
