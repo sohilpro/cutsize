@@ -13,14 +13,14 @@
         <div class="flex font-semibold gap-2 items-center">
           <IconsCustomers />
 
-          <span class="font-bold text-lg"
+          <span v-if="received" class="font-bold text-lg"
             >نام مشتری: <span>{{ received.data.client.name }}</span></span
           >
         </div>
         <div class="flex font-semibold pr-5 gap-2 items-center">
           <IconsPhone />
 
-          <span class="font-bold text-lg"
+          <span v-if="received" class="font-bold text-lg"
             >شماره تماس:
             <span> {{ received.data.client.phone_number }} </span></span
           >

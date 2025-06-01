@@ -81,8 +81,8 @@
                 class="cursor-pointer hover:opacity-70 transition-all"
               >
                 <td class="border border-gray-300 px-4 py-2 text-center">
-                  <!-- {{ index + 1 }} -->
-                  {{ client.id }}
+                  {{ index + 1 }}
+                  <!-- {{ client.id }} -->
                 </td>
                 <td class="border border-gray-300 px-4 py-2 text-center">
                   <span v-if="client.seen" class="flex justify-center">
@@ -211,7 +211,7 @@ function sendPaginationRequest() {
     const offset = (currentPage.value - 1) * limit;
 
     const payload = {
-      type: "next_clients_page",
+      type: "next_page",
       limit,
       offset,
     };
@@ -221,9 +221,9 @@ function sendPaginationRequest() {
 }
 
 const handleSeenClients = async (payload, id) => {
-  if (socket && socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(payload));
-  }
+  // if (socket && socket.readyState === WebSocket.OPEN) {
+  //   socket.send(JSON.stringify(payload));
+  // }
   await navigateTo(`/order/${id}`);
 };
 
