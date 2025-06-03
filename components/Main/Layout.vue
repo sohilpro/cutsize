@@ -106,10 +106,15 @@
             class="relative"
           >
             <button
-              @click="() => (showNotification = !showNotification)"
-              class="flex font-semibold items-center gap-2"
+              @click="handleSeenAndOpen"
+              class="flex relative font-semibold items-center gap-2"
             >
               <IconsBell />
+              <div
+                class="absolute bg-red-500 w-4 h-4 rounded-full text-white top-0 text-xs flex items-center justify-center"
+              >
+                {{ notif }}
+              </div>
 
               پیام ها
             </button>
@@ -117,6 +122,7 @@
             <MainNotification
               @close="() => (showNotification = false)"
               v-show="showNotification"
+              ref="notifications"
             />
           </div>
 
@@ -193,6 +199,13 @@ const { title, crumbItems } = defineProps({
 });
 
 const auth = useAuth();
+const notif = useNotif();
+const notifications = ref(null);
+
+const handleSeenAndOpen = () => {
+  showNotification.value = !showNotification.value;
+  notifications.value.handleSeenMessages();
+};
 
 const showNotification = ref(false);
 const edge = ref(null);

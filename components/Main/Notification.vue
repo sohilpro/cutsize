@@ -15,7 +15,7 @@
         @click="emit('close', false)"
         class="text-orange-500 hover:text-orange-700"
       >
-        <IconsCloseSecond class="w-6 h-6"/>
+        <IconsCloseSecond class="w-6 h-6" />
       </button>
     </div>
 
@@ -44,7 +44,15 @@
         </div>
       </li>
     </ul>
-    <hr class="mx-3" />
+
+    <hr
+      v-if="
+        received &&
+        received.data.notifications.items.filter((i) => i.seen == true).length
+      "
+      class="mx-3"
+    />
+
     <ul v-if="received" class="divide-y text-sm text-right px-3 py-2 space-y-1">
       <li
         v-for="(item, index) in received.data.notifications.items.filter(
@@ -80,6 +88,7 @@ const currentPage = ref(1);
 const limit = 10;
 const offset = ref(10); // First offset is 10
 const totalPages = ref(1);
+const notif = useNotif();
 
 let socket;
 
@@ -102,15 +111,13 @@ onMounted(() => {
     try {
       const data = JSON.parse(event.data);
 
-      if (Array.isArray(data.clients)) {
-        received.value = {
-          type: "connection_established",
-          message: "You are now connected.",
-          data: { ...data },
-        };
-      } else {
-        received.value = data;
+      received.value = data;
+
+      if (data.type === "notification_marked_seen") {
+        notif.value = data.unseen_count;
+        return;
       }
+      notif.value = data.data.notifications.unseen_count;
 
       if (data.next_page) {
         offset.value = data.next_page.offset;
@@ -128,5 +135,25 @@ onMounted(() => {
   socket.addEventListener("close", () => {
     console.log("🔌 Connection closed");
   });
+});
+
+const handleSeenMessages = () => {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    const unseenMessage = received.value.data.notifications.items.filter(
+      (i) => i.seen == false
+    );
+    unseenMessage.forEach((i) => {
+      socket.send(
+        JSON.stringify({
+          type: "mark_notification_as_seen",
+          notification_id: i.id,
+        })
+      );
+    });
+  }
+};
+
+defineExpose({
+  handleSeenMessages,
 });
 </script>

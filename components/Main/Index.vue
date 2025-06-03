@@ -1,6 +1,6 @@
 <template>
   <MainLayout title="مشتری ها" :crumb-items="[{ name: 'مشتری ها', url: '/' }]">
-    <div class="flex flex-col gap-2">
+    <div v-if="received" class="flex flex-col gap-2">
       <div class="border px-2.5 py-1.5 rounded-md flex flex-col gap-2.5">
         <label for="search" class="text-auth-blue font-semibold">
           در جستجوی چه هستید؟
@@ -82,15 +82,7 @@
                 v-for="(client, index) in received.data.clients.items"
                 :key="index"
                 :class="client.seen ? 'bg-green-500/10' : 'bg-orange-500/10'"
-                @click="
-                  handleSeenClients(
-                    {
-                      type: 'mark_client_as_seen',
-                      client_id: client.id,
-                    },
-                    client.id
-                  )
-                "
+                @click="handleSeenClients(client.id)"
                 class="cursor-pointer hover:opacity-70 transition-all"
               >
                 <td class="border border-gray-300 px-4 py-2 text-center">
@@ -131,6 +123,9 @@
         </div>
       </div>
     </div>
+
+    <UtilsExpireDate v-else />
+    <UtilsLoader v-if="loading" />
   </MainLayout>
 </template>
 
@@ -166,6 +161,7 @@ const currentPage = ref(1);
 const limit = 10;
 const offset = ref(0); // First offset is 10
 const totalPages = ref(1);
+const loading = ref(true);
 
 let socket;
 
@@ -176,6 +172,7 @@ const token = useCookie("token").value;
 const socketUrl = `${socket_URI}/clients?token=${encodeURIComponent(token)}`;
 
 onMounted(() => {
+  setTimeout(() => (loading.value = false), 3000);
   socket = new WebSocket(socketUrl);
 
   socket.addEventListener("open", () => {
@@ -185,10 +182,11 @@ onMounted(() => {
 
   socket.addEventListener("message", (event) => {
     try {
+      loading.value = false; // Stop loading
       const data = JSON.parse(event.data);
 
       // Ignore certain message types
-      if (data.type === "mark_client_as_seen") return;
+      // if (data.type === "mark_client_as_seen") return;
 
       // Always store received data
       received.value = data;
@@ -214,6 +212,7 @@ onMounted(() => {
         }
       }
     } catch (error) {
+      loading.value = false;
       console.error("❌ JSON parse error:", error);
     }
   });
@@ -233,7 +232,7 @@ onBeforeUnmount(() => {
 
 function sendPaginationRequest() {
   if (socket && socket.readyState === WebSocket.OPEN) {
-    // const offset = 10 + (currentPage.value - 1) * limit;
+    loading.value = true;
     const offset = (currentPage.value - 1) * limit;
 
     const payload = {
@@ -247,6 +246,7 @@ function sendPaginationRequest() {
 }
 function sendSortingRequest(option = selectedFilter.value) {
   if (socket && socket.readyState === WebSocket.OPEN) {
+    loading.value = true;
     const offset = (currentPage.value - 1) * limit;
 
     const payload = {
@@ -266,6 +266,7 @@ function sendSearchingRequest(query = search.value) {
 
   searchTimeout = setTimeout(() => {
     if (socket && socket.readyState === WebSocket.OPEN) {
+      loading.value = true;
       const offset = search.value ? 0 : (currentPage.value - 1) * limit;
 
       const payload = {
@@ -280,10 +281,7 @@ function sendSearchingRequest(query = search.value) {
   }, 1000); // Delay by 1000ms
 }
 
-const handleSeenClients = async (payload, id) => {
-  // if (socket && socket.readyState === WebSocket.OPEN) {
-  //   socket.send(JSON.stringify(payload));
-  // }
+const handleSeenClients = async (id) => {
   await navigateTo(`/order/${id}`);
 };
 

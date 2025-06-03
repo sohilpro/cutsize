@@ -5,21 +5,21 @@
         پشتیبانی از طیف وسیعی از ماشین آلات
       </h4>
 
-      <!-- <div class="containerAnime">
+      <div class="flex flex-wrap gap-1.5 justify-center items-center">
         <template v-for="(item, index) in items" :key="index">
-          <div class="itemLeft" :class="`item${index + 1}`">
+          <div>
             <img :src="item.src" :alt="item.alt" />
           </div>
         </template>
-      </div> -->
+      </div>
 
-      <div ref="scrollers" class="scroller" data-speed="slow">
+      <!-- <div ref="scrollers" class="scroller" data-speed="slow">
         <ul class="tag-list scroller__inner">
           <li v-for="(item, index) in items" :key="index">
             <img :src="item.src" :alt="item.alt" />
           </li>
         </ul>
-      </div>
+      </div> -->
     </main>
   </section>
 </template>
@@ -73,31 +73,30 @@ const items = ref([
   },
 ]);
 
-onMounted(() => {
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    addAnimation();
-  }
+// onMounted(() => {
+//   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+//     addAnimation();
+//   }
 
-  function addAnimation() {
-    // scrollers.forEach((scroller) => {
-    // add data-animated="true" to every `.scroller` on the page
-    scrollers.value.setAttribute("data-animated", true);
+//   function addAnimation() {
+//     // scrollers.forEach((scroller) => {
+//     // add data-animated="true" to every `.scroller` on the page
+//     scrollers.value.setAttribute("data-animated", true);
 
-    // Make an array from the elements within `.scroller-inner`
-    const scrollerInner = scrollers.value.querySelector(".scroller__inner");
+//     // Make an array from the elements within `.scroller-inner`
+//     const scrollerInner = scrollers.value.querySelector(".scroller__inner");
 
-    const scrollerContent = Array.from(scrollerInner.children);
-    
+//     const scrollerContent = Array.from(scrollerInner.children);
 
-    // For each item in the array, clone it
-    // add aria-hidden to it
-    // add it into the `.scroller-inner`
-    scrollerContent.forEach((item) => {
-      const duplicatedItem = item.cloneNode(true);
-      duplicatedItem.setAttribute("aria-hidden", true);
-      scrollerInner.appendChild(duplicatedItem);
-    });
-    // });
-  }
-});
+//     // For each item in the array, clone it
+//     // add aria-hidden to it
+//     // add it into the `.scroller-inner`
+//     scrollerContent.forEach((item) => {
+//       const duplicatedItem = item.cloneNode(true);
+//       duplicatedItem.setAttribute("aria-hidden", true);
+//       scrollerInner.appendChild(duplicatedItem);
+//     });
+//     // });
+//   }
+// });
 </script>

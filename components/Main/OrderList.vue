@@ -1,12 +1,15 @@
 <template>
   <MainLayout
-    title="لیست سفارشهای مشتری"
-    :crumb-items="[{ name: 'جزییات سفارش', url: '/' }]"
+    title="لیست سفارش های مشتری"
+    :crumb-items="[
+      { name: 'مشتری ها', url: '/order' },
+      { name: 'جزییات سفارش', url: '/' },
+    ]"
   >
     <div
+      v-if="received"
       class="border overflow-x-auto h-screen px-2.5 py-1.5 rounded-md flex flex-col gap-2.5"
     >
-      <UtilsLoader v-if="loading" />
       <div
         class="flex text-auth-blue items-center divide-x-reverse divide-x divide-auth-blue gap-5"
       >
@@ -167,6 +170,9 @@
         </tbody>
       </table>
     </div>
+
+    <UtilsExpireDate v-else />
+    <UtilsLoader v-if="loading" />
   </MainLayout>
 </template>
 
@@ -200,11 +206,17 @@ const frameworks = [
 ];
 
 const selectedFormat = ref("opticut");
-const loading = useLoading();
+const loading = ref(true);
 
 const handleDownloadLink = (item) => {
   const selected = selectedFormat.value;
   const link = item.files[selected];
+
+  handleSeenPanel({
+    type: "mark_panel_as_seen",
+    panel_id: item.id,
+  });
+
   if (link) {
     window.open(link, "_blank");
   } else {
@@ -230,6 +242,7 @@ const socketUrl = `${socket_URI}/panels/${
 }?token=${encodeURIComponent(token)}`;
 
 onMounted(() => {
+  setTimeout(() => (loading.value = false), 3000);
   socket = new WebSocket(socketUrl);
 
   socket.addEventListener("open", () => {
@@ -241,18 +254,15 @@ onMounted(() => {
       const data = JSON.parse(event.data);
       if (data.type == "panel_lock_toggled") return;
       if (data.type == "panel_shared") {
-        received.value.unshift(data.client);
-        return;
+        // received.value.unshift(data.client);
+        showBrowserNotification(
+          "پیام جدید",
+          "یک پنل جدید به اشتراک گذاشته شد."
+        );
+        useNuxtApp().$toast.info("یک پنل جدید به اشتراک گذاشته شد.");
       }
-      // if (Array.isArray(data.clients)) {
-      //   received.value = {
-      //     type: "connection_established",
-      //     message: "You are now connected.",
-      //     data: { ...data },
-      //   };
-      // } else {
+
       received.value = data;
-      // }
 
       if (data.next_page) {
         offset.value = data.next_page.offset;
@@ -278,12 +288,29 @@ const handleLockedUnlocked = async (payload) => {
   }
 };
 
-const handleSeenPanel = async (payload, id) => {
+const handleSeenPanel = async (payload) => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(payload));
   }
-  await navigateTo(`/order/details/${id}`);
 };
+
+function showBrowserNotification(title, message) {
+  if (Notification.permission === "granted") {
+    new Notification(title, {
+      body: message,
+      icon: "/logo.svg",
+    });
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        new Notification(title, {
+          body: message,
+          icon: "/logo.svg",
+        });
+      }
+    });
+  }
+}
 </script>
 
 <style scoped>
