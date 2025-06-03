@@ -6,23 +6,34 @@
           در جستجوی چه هستید؟
         </label>
 
-        <div class="flex px-3 py-2 bg-auth-blue w-full rounded">
-          <button class="pl-2">
-            <IconsSearch />
-          </button>
+        <FormKit
+          :config="{ validationVisibility: 'submit' }"
+          type="form"
+          id="searching"
+          :actions="false"
+          :incomplete-message="false"
+          @submit="sendSearchingRequest(search)"
+        >
+          <div class="flex px-3 py-2 bg-auth-blue w-full rounded">
+            <button class="pl-2">
+              <IconsSearch />
+            </button>
 
-          <FormKit
-            type="text"
-            input-class="input-style placeholder:text-auth-blue px-5 py-2 !bg-auth-gray rounded h-full"
-            id="search"
-            placeholder="نام مشتری، شماره موبایل و..."
-            validation="required"
-            validation-visibility="submit"
-            :validation-messages="{
-              required: 'این فیلد نباید خالی باشد.',
-            }"
-          />
-        </div>
+            <FormKit
+              type="text"
+              input-class="input-style placeholder:text-auth-blue px-5 py-2 !bg-auth-gray rounded h-full"
+              id="search"
+              v-model="search"
+              @input="sendSearchingRequest"
+              placeholder="نام مشتری، شماره موبایل و..."
+              validation="required"
+              validation-visibility="submit"
+              :validation-messages="{
+                required: 'این فیلد نباید خالی باشد.',
+              }"
+            />
+          </div>
+        </FormKit>
       </div>
 
       <div class="border px-2.5 py-1.5 rounded-md flex flex-col gap-2.5">
@@ -44,6 +55,8 @@
                 type="select"
                 name="filter"
                 :options
+                v-model="selectedFilter"
+                @change="sendSortingRequest(selectedFilter)"
                 input-class="appearance-none outline-none w-52 px-3 py-2 bg-white"
               /><span
                 class="absolute w-[1em] text-neutral-700 pointer-events-none left-2"
@@ -53,7 +66,7 @@
             </div>
           </div>
         </div>
-     
+
         <div v-if="received" class="flex items-end gap-10">
           <table class="w-full border-collapse border border-gray-300">
             <thead class="bg-auth-blue text-white">
@@ -125,23 +138,25 @@
 const options = ref([
   {
     label: "نام مشتری (الف-ی)",
-    value: "a-value",
+    value: "name_asc",
   },
   {
     label: "نام مشتری (ی-الف)",
-    value: "a-value",
+    value: "name_desc",
   },
 
   {
     label: "خوانده شده ها",
-    value: "a-value",
+    value: "default",
   },
   {
     label: "خوانده نشده ها",
-    value: "a-value",
+    value: "unseen",
   },
 ]);
 
+const selectedFilter = ref("default");
+const search = ref("");
 const received = ref(null);
 const currentPage = ref(1);
 const limit = 10;
@@ -168,27 +183,34 @@ onMounted(() => {
     try {
       const data = JSON.parse(event.data);
 
-      if (data.type == "mark_client_as_seen") return;
-      if (data.type == "clients_page") {
-        received.value = data;
+      // Ignore certain message types
+      if (data.type === "mark_client_as_seen") return;
+
+      // Always store received data
+      received.value = data;
+
+      // Calculate total pages if clients data is available
+      const nextOffset = data?.data?.clients?.next_page?.offset;
+
+      if (nextOffset !== undefined && nextOffset !== null) {
+        offset.value = nextOffset;
+
+        totalPages.value = Math.ceil(nextOffset / limit) + 1;
       } else {
-        received.value = data;
-      }
+        // If search is active and no next page, reset page to 1
+        if (search.value) {
+          currentPage.value = 1;
+          offset.value = 0;
 
-      // if (Array.isArray(data.data.clients.items)) {
-      //   received.value = {
-      //     type: "connection_established",
-      //     message: "You are now connected.",
-      //     data: { ...data.data.clients.items },
-      //   };
-      // }
-
-      if (data.data.clients.next_page) {
-        offset.value = data.data.clients.next_page.offset;
-        totalPages.value = Math.ceil(offset.value / limit) + 1;
+          // When search is active and no next page, assume it's a single-page result
+          totalPages.value = 1;
+        } else {
+          // Normal case: no next page, not a search
+          totalPages.value = Math.ceil(offset.value / limit) + 1;
+        }
       }
-    } catch (e) {
-      console.error("❌ JSON parse error:", e);
+    } catch (error) {
+      console.error("❌ JSON parse error:", error);
     }
   });
 
@@ -219,6 +241,40 @@ function sendPaginationRequest() {
     socket.send(JSON.stringify(payload));
   }
 }
+function sendSortingRequest(option = selectedFilter.value) {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    const offset = (currentPage.value - 1) * limit;
+
+    const payload = {
+      type: "sort_clients",
+      option,
+      limit,
+      offset,
+    };
+
+    socket.send(JSON.stringify(payload));
+  }
+}
+let searchTimeout;
+
+function sendSearchingRequest(query = search.value) {
+  clearTimeout(searchTimeout);
+
+  searchTimeout = setTimeout(() => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      const offset = search.value ? 0 : (currentPage.value - 1) * limit;
+
+      const payload = {
+        type: "search_clients",
+        query,
+        limit,
+        offset,
+      };
+
+      socket.send(JSON.stringify(payload));
+    }
+  }, 1000); // Delay by 1000ms
+}
 
 const handleSeenClients = async (payload, id) => {
   // if (socket && socket.readyState === WebSocket.OPEN) {
@@ -231,6 +287,7 @@ const handleSeenClients = async (payload, id) => {
 function onPageChange(newPage) {
   currentPage.value = newPage;
   sendPaginationRequest();
+  sendSortingRequest();
 }
 </script>
 

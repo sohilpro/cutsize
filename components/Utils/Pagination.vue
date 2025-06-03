@@ -11,26 +11,29 @@
       <IconsLeft class="rotate-180" />
     </button>
 
-    <!-- Leading Ellipsis -->
-    <span v-if="totalPages > 5 && currentPage > 4">...</span>
+    <!-- Page Buttons with Ellipses -->
+    <template v-for="(page, index) in visiblePages" :key="'page-' + page">
+      <!-- Ellipsis before current page group -->
+      <span
+        v-if="index > 0 && page - visiblePages[index - 1] > 1"
+        class="px-2"
+        :key="'ellipsis-' + index"
+      >
+        ...
+      </span>
 
-    <!-- Page Numbers -->
-    <button
-      v-for="page in visiblePages"
-      :key="page"
-      @click="$emit('update:page', page)"
-      :class="[
-        'px-3 py-1 border font-semibold transition',
-        currentPage === page
-          ? 'bg-indigo-900 text-white'
-          : 'border-auth-blue text-indigo-900 hover:bg-auth-blue/10',
-      ]"
-    >
-      {{ page }}
-    </button>
-
-    <!-- Trailing Ellipsis -->
-    <span v-if="totalPages > 5 && currentPage < totalPages - 3">...</span>
+      <button
+        @click="$emit('update:page', page)"
+        :class="[
+          'px-3 py-1 border font-semibold transition',
+          currentPage === page
+            ? 'bg-indigo-900 text-white'
+            : 'border-auth-blue text-indigo-900 hover:bg-auth-blue/10',
+        ]"
+      >
+        {{ page }}
+      </button>
+    </template>
 
     <!-- Next Button -->
     <button
@@ -54,32 +57,25 @@ const emit = defineEmits<{
 }>();
 
 const visiblePages = computed(() => {
-  if (props.totalPages <= 3) {
-    return Array.from({ length: props.totalPages }, (_, i) => i + 1);
+  const pages = new Set<number>();
+
+  const current = props.currentPage;
+  const total = props.totalPages;
+
+  // Always show first and last
+  if (total >= 1) pages.add(1);
+  if (total > 1) pages.add(total);
+
+  // Add current, previous, next if within bounds
+  for (let i = current - 1; i <= current + 1; i++) {
+    if (i > 1 && i < total) {
+      pages.add(i);
+    }
   }
 
-  if (props.currentPage <= 3) {
-    return [1, 2, 3, 4, 5].filter((page) => page <= props.totalPages);
-  }
-
-  if (props.currentPage >= props.totalPages - 2) {
-    return [
-      props.totalPages - 4,
-      props.totalPages - 3,
-      props.totalPages - 2,
-      props.totalPages - 1,
-      props.totalPages,
-    ].filter((page) => page >= 1);
-  }
-
-  return [
-    props.currentPage - 2,
-    props.currentPage - 1,
-    props.currentPage,
-    props.currentPage + 1,
-    props.currentPage + 2,
-  ].filter((page) => page >= 1 && page <= props.totalPages);
+  return Array.from(pages).sort((a, b) => a - b);
 });
+
 
 function emitPrevPage() {
   if (props.currentPage > 1) {
