@@ -56,7 +56,7 @@
                 name="filter"
                 :options
                 v-model="selectedFilter"
-                @change="sendSortingRequest(selectedFilter)"
+                @change="onFilterChange"
                 input-class="appearance-none outline-none w-52 px-3 py-2 bg-white"
               /><span
                 class="absolute w-[1em] text-neutral-700 pointer-events-none left-2"
@@ -137,6 +137,10 @@
 <script setup>
 const options = ref([
   {
+    label: "پیشفرض",
+    value: "default",
+  },
+  {
     label: "نام مشتری (الف-ی)",
     value: "name_asc",
   },
@@ -147,7 +151,7 @@ const options = ref([
 
   {
     label: "خوانده شده ها",
-    value: "default",
+    value: "seen",
   },
   {
     label: "خوانده نشده ها",
@@ -288,6 +292,11 @@ function onPageChange(newPage) {
   currentPage.value = newPage;
   sendPaginationRequest();
   sendSortingRequest();
+}
+
+function onFilterChange() {
+  currentPage.value = 1;
+  sendSortingRequest(selectedFilter.value);
 }
 </script>
 
