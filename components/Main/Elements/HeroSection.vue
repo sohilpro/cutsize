@@ -22,10 +22,15 @@
       <p class="text-5xl font-extrabold text-center">
         درحال حاضر
 
-        <span class="text-auth-orange"> 112 </span>
+        <span class="text-auth-orange"> {{ factory_count.count }} </span>
 
         کارگاه از کات سایز استفاده میکنند.
       </p>
     </div>
   </section>
 </template>
+
+
+<script setup>
+const { data: factory_count } = await useFetch("/api/workshop/factory-count");
+</script>

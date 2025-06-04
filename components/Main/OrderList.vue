@@ -205,6 +205,7 @@ const frameworks = [
   },
 ];
 
+const idOrder = useState("idOrder", () => null);
 const selectedFormat = ref("opticut");
 const loading = ref(true);
 
@@ -212,10 +213,12 @@ const handleDownloadLink = (item) => {
   const selected = selectedFormat.value;
   const link = item.files[selected];
 
-  handleSeenPanel({
-    type: "mark_panel_as_seen",
-    panel_id: item.id,
-  });
+  if (!item.seen) {
+    handleSeenPanel({
+      type: "mark_panel_as_seen",
+      panel_id: item.id,
+    });
+  }
 
   if (link) {
     window.open(link, "_blank");
@@ -242,6 +245,7 @@ const socketUrl = `${socket_URI}/panels/${
 }?token=${encodeURIComponent(token)}`;
 
 onMounted(() => {
+  idOrder.value = route.params.id;
   setTimeout(() => (loading.value = false), 3000);
   socket = new WebSocket(socketUrl);
 
@@ -253,6 +257,7 @@ onMounted(() => {
     try {
       const data = JSON.parse(event.data);
       if (data.type == "panel_lock_toggled") return;
+      if (data.type == "panel_marked_seen") return;
       if (data.type == "panel_shared") {
         // received.value.unshift(data.client);
         showBrowserNotification(

@@ -20,7 +20,14 @@
     </div>
 
     <!-- Notification Items -->
-    <ul v-if="received" class="divide-y text-sm text-right px-3 py-2 space-y-1">
+    <ul
+      v-if="
+        received &&
+        received.data?.notifications?.items?.filter((i) => i.seen == false)
+          .length
+      "
+      class="divide-y text-sm text-right px-3 py-2 space-y-1"
+    >
       <li
         v-for="(item, index) in received.data.notifications.items.filter(
           (i) => i.seen == false
@@ -48,12 +55,20 @@
     <hr
       v-if="
         received &&
-        received.data.notifications.items.filter((i) => i.seen == true).length
+        received.data?.notifications?.items?.filter((i) => i.seen == true)
+          .length
       "
       class="mx-3"
     />
 
-    <ul v-if="received" class="divide-y text-sm text-right px-3 py-2 space-y-1">
+    <ul
+      v-if="
+        received &&
+        received.data?.notifications?.items?.filter((i) => i.seen == true)
+          .length
+      "
+      class="divide-y text-sm text-right px-3 py-2 space-y-1"
+    >
       <li
         v-for="(item, index) in received.data.notifications.items.filter(
           (i) => i.seen == true
@@ -111,12 +126,19 @@ onMounted(() => {
     try {
       const data = JSON.parse(event.data);
 
-      received.value = data;
-
       if (data.type === "notification_marked_seen") {
         notif.value = data.unseen_count;
         return;
       }
+      if (data.type === "notifications_page") {
+        received.value = data;
+        notif.value = data.data.notifications.unseen_count;
+        return;
+      }
+
+      if (data.type === "error") return;
+
+      received.value = data;
       notif.value = data.data.notifications.unseen_count;
 
       if (data.next_page) {
@@ -137,19 +159,35 @@ onMounted(() => {
   });
 });
 
-const handleSeenMessages = () => {
+const handleSeenMessages = async () => {
   if (socket && socket.readyState === WebSocket.OPEN) {
-    const unseenMessage = received.value.data.notifications.items.filter(
+    const unseenMessage = received.value?.data?.notifications?.items?.filter(
       (i) => i.seen == false
     );
-    unseenMessage.forEach((i) => {
-      socket.send(
-        JSON.stringify({
-          type: "mark_notification_as_seen",
-          notification_id: i.id,
-        })
-      );
-    });
+
+    if (unseenMessage !== undefined && unseenMessage.length !== 0) {
+      console.log("seened");
+
+      unseenMessage.forEach((i) => {
+        socket.send(
+          JSON.stringify({
+            type: "mark_notification_as_seen",
+            notification_id: i.id,
+          })
+        );
+      });
+
+      // ✅ Request updated notifications after short delay
+      setTimeout(() => {
+        socket.send(
+          JSON.stringify({
+            type: "get_notifications", // ✅ confirm this type with your backend
+            offset: 0,
+            limit, // reuse your limit
+          })
+        );
+      }, 300);
+    }
   }
 };
 

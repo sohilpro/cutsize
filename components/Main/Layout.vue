@@ -11,7 +11,7 @@
       <UtilsLoader v-else-if="!auth || !auth.name || !auth.address" />
 
       <header
-        class="flex w-full shadow-md h-28 px-8 justify-between items-center bg-gradient-to-t from-auth-gray to-auth-kerem"
+        class="flex print:hidden w-full shadow-md h-28 px-8 justify-between items-center bg-gradient-to-t from-auth-gray to-auth-kerem"
       >
         <UtilsPopup
           width="400"
@@ -111,6 +111,7 @@
             >
               <IconsBell />
               <div
+                v-if="notif != 0 && notif > 0"
                 class="absolute bg-red-500 w-4 h-4 rounded-full text-white top-0 text-xs flex items-center justify-center"
               >
                 {{ notif }}
@@ -175,7 +176,7 @@
       </header>
 
       <section class="px-8 relative space-y-5">
-        <div class="space-y-5">
+        <div class="space-y-5 print:hidden">
           <UtilsBreadCrumb :items="crumbItems" />
 
           <h2 class="text-3xl text-auth-blue font-black">
@@ -204,7 +205,9 @@ const notifications = ref(null);
 
 const handleSeenAndOpen = () => {
   showNotification.value = !showNotification.value;
-  notifications.value.handleSeenMessages();
+  if (showNotification.value) {
+    notifications.value.handleSeenMessages();
+  }
 };
 
 const showNotification = ref(false);

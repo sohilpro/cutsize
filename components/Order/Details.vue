@@ -2,18 +2,26 @@
   <MainLayout
     title="صورت وضعیت سفارش ها "
     :crumb-items="[
-      { name: 'جزییات سفارش', url: '/' },
-      { name: 'جزییات سفارش', url: '/' },
+      { name: 'مشتری ها', url: '/order' },
+      { name: 'جزییات سفارش', url: `/order/${idOrder}` },
+      { name: 'صورت وضعیت', url: '/' },
     ]"
   >
-    <div class="flex items-center gap-5 absolute left-10 -top-5">
-      <!-- <IconsPrint class="w-40 h-40 cursor-pointer" /> -->
+    <div
+      :class="{ 'opacity-50': data.items.length == 0 }"
+      class="flex print:hidden items-center gap-5 absolute left-10 -top-5"
+    >
+      <button :disabled="data.items.length == 0">
+        <IconsPrint @click="printPage" class="w-40 h-40" />
+      </button>
       <IconsLoading v-if="loading" class="w-10 h-10 top-0 left-0" />
-      <IconsPdfDl
-        @click="download"
-        :class="{ 'opacity-50': loading }"
-        class="w-40 h-40 cursor-pointer"
-      />
+      <button :disabled="data.items.length == 0">
+        <IconsPdfDl
+          @click="download"
+          :class="{ 'opacity-50': loading }"
+          class="w-40 h-40"
+        />
+      </button>
     </div>
 
     <div
@@ -42,9 +50,9 @@
 
       <div class="flex flex-col gap-2">
         <div
-          class="rounded-t-xl bg-auth-blue text-white flex items-center justify-around gap-5 p-5 divide-x divide-white divide-x-reverse"
+          class="rounded-t-xl bg-auth-blue print:text-black text-white flex items-center justify-around gap-5 p-5 divide-x divide-white divide-x-reverse"
         >
-          <IconsTableLogo />
+          <IconsTableLogo class="print:hidden" />
 
           <div class="flex flex-col gap-3 pr-5">
             <span class="font-bold text-lg">
@@ -136,7 +144,9 @@
                 <td class="border border-gray-300 px-4 py-2">
                   {{ item.length }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">{{ item.id }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ index + 1 }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -153,6 +163,7 @@ import { faIR } from "date-fns-jalali/locale";
 const route = useRoute();
 const loading = useLoading();
 const basePdf = ref(null);
+const idOrder = useState("idOrder");
 
 const { data } = await useFetch("/api/workshop/panel/order-status", {
   query: { id: route.params.id },
@@ -197,4 +208,6 @@ const downloadPdf = () => {
   downloadLink.download = fileName;
   downloadLink.click();
 };
+
+const printPage = () => window.print();
 </script>
