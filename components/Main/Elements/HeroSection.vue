@@ -1,6 +1,11 @@
 <template>
   <section
-    style="z-index: -2; background-image: url('/img/hero-bg.webp'); background-repeat: no-repeat; background-size: cover;"
+    style="
+      z-index: -2;
+      background-image: url('/img/hero-bg.webp');
+      background-repeat: no-repeat;
+      background-size: cover;
+    "
     class="relative rounded-bl-[110px] overflow-hidden py-20 px-40"
   >
     <div class="flex gap-8 flex-col">
@@ -16,7 +21,11 @@
       <div class="flex items-center relative">
         <img src="/img/hero-mob.webp" alt="..." />
         <img src="/img/hero-desktop.webp" alt="..." />
-        <img src="/img/hero-person.webp" class="w-[40%] -top-28 absolute -z-10 -left-28" alt="..." />
+        <img
+          src="/img/hero-person.webp"
+          class="w-[40%] -top-28 absolute -z-10 -left-28"
+          alt="..."
+        />
       </div>
 
       <p class="text-5xl font-extrabold text-center">
@@ -29,7 +38,6 @@
     </div>
   </section>
 </template>
-
 
 <script setup>
 const { data: factory_count } = await useFetch("/api/workshop/factory-count");

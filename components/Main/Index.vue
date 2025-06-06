@@ -115,11 +115,11 @@
             </tbody>
           </table>
 
-          <UtilsPagination
+          <!-- <UtilsPagination
             :current-page="currentPage"
             :total-pages="totalPages"
             @update:page="onPageChange"
-          />
+          /> -->
         </div>
       </div>
     </div>
@@ -177,7 +177,7 @@ onMounted(() => {
 
   socket.addEventListener("open", () => {
     console.log("✅ Connected");
-    sendPaginationRequest();
+    // sendPaginationRequest();
   });
 
   socket.addEventListener("message", (event) => {
@@ -192,25 +192,25 @@ onMounted(() => {
       received.value = data;
 
       // Calculate total pages if clients data is available
-      const nextOffset = data?.data?.clients?.next_page?.offset;
+      // const nextOffset = data?.data?.clients?.next_page?.offset;
 
-      if (nextOffset !== undefined && nextOffset !== null) {
-        offset.value = nextOffset;
+      // if (nextOffset !== undefined && nextOffset !== null) {
+      //   offset.value = nextOffset;
 
-        totalPages.value = Math.ceil(nextOffset / limit) + 1;
-      } else {
-        // If search is active and no next page, reset page to 1
-        if (search.value) {
-          currentPage.value = 1;
-          offset.value = 0;
+      //   totalPages.value = Math.ceil(nextOffset / limit) + 1;
+      // } else {
+      //   // If search is active and no next page, reset page to 1
+      //   if (search.value) {
+      //     currentPage.value = 1;
+      //     offset.value = 0;
 
-          // When search is active and no next page, assume it's a single-page result
-          totalPages.value = 1;
-        } else {
-          // Normal case: no next page, not a search
-          totalPages.value = Math.ceil(offset.value / limit) + 1;
-        }
-      }
+      //     // When search is active and no next page, assume it's a single-page result
+      //     totalPages.value = 1;
+      //   } else {
+      //     // Normal case: no next page, not a search
+      //     totalPages.value = Math.ceil(offset.value / limit) + 1;
+      //   }
+      // }
     } catch (error) {
       loading.value = false;
       console.error("❌ JSON parse error:", error);
@@ -252,8 +252,8 @@ function sendSortingRequest(option = selectedFilter.value) {
     const payload = {
       type: "sort_clients",
       option,
-      limit,
-      offset,
+      // limit,
+      // offset,
     };
 
     socket.send(JSON.stringify(payload));
@@ -272,8 +272,8 @@ function sendSearchingRequest(query = search.value) {
       const payload = {
         type: "search_clients",
         query,
-        limit,
-        offset,
+        // limit,
+        // offset,
       };
 
       socket.send(JSON.stringify(payload));

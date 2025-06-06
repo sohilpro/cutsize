@@ -14,18 +14,18 @@
       <button :disabled="data.items.length == 0">
         <IconsPrint @click="printPage" class="w-40 h-40" />
       </button>
-      <IconsLoading v-if="loading" class="w-10 h-10 top-0 left-0" />
+      <!-- <IconsLoading v-if="loading" class="w-10 h-10 top-0 left-0" />
       <button :disabled="data.items.length == 0">
         <IconsPdfDl
           @click="download"
           :class="{ 'opacity-50': loading }"
           class="w-40 h-40"
         />
-      </button>
+      </button> -->
     </div>
 
     <div
-      class="border overflow-x-auto h-screen px-2.5 py-1.5 rounded-md flex flex-col gap-2.5"
+      class="border overflow-x-auto h-full px-2.5 py-1.5 rounded-md flex flex-col gap-2.5"
     >
       <div
         class="border text-auth-blue border-auth-blue divide-y divide-auth-blue rounded-xl"
@@ -132,7 +132,7 @@
                 <td class="border border-gray-300 px-4 py-2">
                   {{ item.length_1 }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border text-xs border-gray-300 px-4 py-2">
                   {{ item.description }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2">
