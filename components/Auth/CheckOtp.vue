@@ -3,7 +3,7 @@
   <form @submit.prevent="handleActivation" id="check-otp" class="mt-8">
     <div class="form-style">
       <label for="otp" class="!text-2xl font-bold !text-auth-blue">
-        کد تایید را ارد کنید
+        کد تایید را وارد کنید
       </label>
 
       <div class="main-form">

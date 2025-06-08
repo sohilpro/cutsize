@@ -1,9 +1,9 @@
 <template>
   <Transition name="modal-animation">
     <!-- Modal Background -->
+    <!-- @click.self="close" -->
     <div
       v-show="modalActive"
-      @click.self="close"
       class="fixed inset-0 z-10 bg-black/10 flex items-center justify-center backdrop-blur-md"
     >
       <Transition name="modal-animation-inner">

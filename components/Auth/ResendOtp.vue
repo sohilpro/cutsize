@@ -4,7 +4,7 @@
       <VueCountdown
         v-if="!state.resendOtp"
         :transform="transformSlotProps"
-        :time="120 * 100"
+        :time="150 * 100"
         v-slot="{ minutes, seconds }"
         @end="onCountdownEnd"
         class="text-auth-blue"
