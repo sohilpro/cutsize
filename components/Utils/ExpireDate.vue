@@ -6,7 +6,7 @@
       اشتراک شما به پایان رسیده برای تمدید اشتراک با شماره زیر در ارتباط باشید
     </h5>
 
-    <NuxtLink to="tel:+989129325830">
+    <NuxtLink to="tel:+989125785162">
       <IconsCall class="w-full h-full" />
     </NuxtLink>
   </div>

@@ -2,13 +2,12 @@
   <ClientOnly>
     <main class="space-y-5">
       <UtilsPopup
-        v-if="!auth || !auth.name || !auth.address"
+        v-if="!auth || !auth.name"
         width="400"
         :modal-active="true"
       >
-        <AuthInformation />
+        <AuthInformation :close-popup="togglePopupInfo"/>
       </UtilsPopup>
-      <UtilsLoader v-else-if="!auth || !auth.name || !auth.address" />
 
       <header
         class="flex print:hidden w-full shadow-md h-28 px-8 justify-between items-center bg-gradient-to-t from-auth-gray to-auth-kerem"

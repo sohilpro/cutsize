@@ -256,8 +256,10 @@ onMounted(() => {
   socket.addEventListener("message", (event) => {
     try {
       const data = JSON.parse(event.data);
-      if (data.type == "panel_lock_toggled") return;
-      if (data.type == "panel_marked_seen") return;
+
+      if (["panel_lock_toggled", "panel_marked_seen"].includes(data.type))
+        return;
+
       if (data.type == "panel_shared") {
         // received.value.unshift(data.client);
         showBrowserNotification(
@@ -266,6 +268,8 @@ onMounted(() => {
         );
         useNuxtApp().$toast.info("یک پنل جدید به اشتراک گذاشته شد.");
       }
+      if (data.type == "panel_shared" && data.data.panel.id != route.params.id)
+        return;
 
       received.value = data;
 

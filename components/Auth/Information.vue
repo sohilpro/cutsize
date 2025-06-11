@@ -44,7 +44,7 @@
 
         <FormKitMessages :node="name?.node" />
       </div>
-      <div class="form-style">
+      <!-- <div class="form-style">
         <label for="address"> آدرس مجموعه خود را وارد کنید </label>
 
         <div class="main-form">
@@ -69,7 +69,7 @@
         </div>
 
         <FormKitMessages :node="address?.node" />
-      </div>
+      </div> -->
 
       <!-- Password Section -->
       <!-- <h3 class="text-gray-700 font-semibold text-sm">تغییر رمز عبور</h3> -->
@@ -92,7 +92,8 @@ const auth = useAuth();
 
 const inputs = reactive({
   name: auth.value.name ? auth.value.name : null,
-  address: auth.value.address ? auth.value.address : null,
+  // address: auth.value.address ? auth.value.address : null,
+  address: null,
 });
 
 const handlInformation = async () => {
@@ -105,7 +106,7 @@ const handlInformation = async () => {
 
     auth.value = data;
     await navigateTo("/order");
-    closePopup()
+    closePopup();
     useNuxtApp().$toast.success("اطلاعات با موفقیت ثبت شد.");
   } catch (error) {
     auth.value = null;

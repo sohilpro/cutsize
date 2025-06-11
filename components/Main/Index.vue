@@ -79,7 +79,7 @@
             </thead>
             <tbody>
               <tr
-                v-for="(client, index) in received.data.clients.items"
+                v-for="(client, index) in received?.data?.clients?.items"
                 :key="index"
                 :class="client.seen ? 'bg-green-500/10' : 'bg-orange-500/10'"
                 @click="handleSeenClients(client.id)"
@@ -214,6 +214,8 @@ onMounted(() => {
     } catch (error) {
       loading.value = false;
       console.error("❌ JSON parse error:", error);
+    } finally {
+      loading.value = false;
     }
   });
 
@@ -232,7 +234,7 @@ onBeforeUnmount(() => {
 
 function sendPaginationRequest() {
   if (socket && socket.readyState === WebSocket.OPEN) {
-    loading.value = true;
+    // loading.value = true;
     const offset = (currentPage.value - 1) * limit;
 
     const payload = {

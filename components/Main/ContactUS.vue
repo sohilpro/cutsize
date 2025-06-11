@@ -6,7 +6,7 @@
     >
       <div class="flex flex-col items-center">
         <h6 class="text-3xl font-black">تماس با پشتیبانی کات سایز</h6>
-        <NuxtLink to="tel:+989129325830">
+        <NuxtLink to="tel:+989125785162">
           <!-- <img class="w-full h-full" src="/img/contact/call.svg" alt="...." /> -->
            <IconsCall class="w-full h-full"/>
         </NuxtLink>

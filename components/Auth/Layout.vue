@@ -8,7 +8,7 @@
       :class="{ 'mt-20': headInBottom }"
     >
       <h4
-        v-if="!headInBottom"
+        v-if="!headInBottom && headShow"
         class="text-white items-center flex gap-2 text-4xl font-semibold"
       >
         در حال حاضر
@@ -57,13 +57,18 @@
     </h4>
 
     <h4
-      v-if="headInBottom"
+      v-if="headInBottom && headShow"
       class="text-white flex justify-center mt-8 gap-2 items-center text-4xl font-semibold"
     >
       در حال حاضر
       <!-- <span class="text-auth-orange font-bold underline">9998</span> -->
       <ClientOnly>
-        <AnimatedCounter :value="998" :duration="100" class="counter" />
+        <AnimatedCounter
+          v-if="factory_count.count"
+          :value="factory_count.count"
+          :duration="1000"
+          class="counter"
+        />
       </ClientOnly>
       کارگاه از کات سایز استفاده میکنند
     </h4>
@@ -78,28 +83,33 @@ useHead({
   },
 });
 
-const { title, welcome, register, headInBottom, showTitle } = defineProps({
-  title: {
-    type: String,
-    default: "سلام",
-  },
-  welcome: {
-    type: Boolean,
-    default: true,
-  },
-  showTitle: {
-    type: Boolean,
-    default: true,
-  },
-  register: {
-    type: Boolean,
-    default: false,
-  },
-  headInBottom: {
-    type: Boolean,
-    default: false,
-  },
-});
+const { title, welcome, register, headInBottom, showTitle, headShow } =
+  defineProps({
+    title: {
+      type: String,
+      default: "سلام",
+    },
+    welcome: {
+      type: Boolean,
+      default: true,
+    },
+    headShow: {
+      type: Boolean,
+      default: true,
+    },
+    showTitle: {
+      type: Boolean,
+      default: true,
+    },
+    register: {
+      type: Boolean,
+      default: false,
+    },
+    headInBottom: {
+      type: Boolean,
+      default: false,
+    },
+  });
 
 const { data: factory_count } = await useFetch("/api/workshop/factory-count");
 </script>
