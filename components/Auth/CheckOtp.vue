@@ -102,7 +102,7 @@ const handleActivation = async () => {
     await navigateTo("/order");
     useNuxtApp().$toast.success("خوش آمدید.");
   } catch (error) {
-    console.log("Error fetching data");
+     return useNuxtApp().$toast.error(error.data.message);
   } finally {
     state.loading = false;
   }

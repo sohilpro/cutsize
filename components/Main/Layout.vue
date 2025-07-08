@@ -242,7 +242,7 @@ const handleLogout = async () => {
     reloadNuxtApp();
     auth.value = null;
   } catch (error) {
-    console.log(error);
+    return useNuxtApp().$toast.error(error.data.message);
   }
 };
 </script>

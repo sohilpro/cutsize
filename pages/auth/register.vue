@@ -39,7 +39,7 @@ const handleRegister = async (body) => {
     step.value = 2;
     useNuxtApp().$toast.info("کد تایید را وارد کنید.");
   } catch (error) {
-    console.log(error);
+    return useNuxtApp().$toast.error(error.data.message);
   } finally {
     loading.value = false;
   }
