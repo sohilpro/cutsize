@@ -41,7 +41,8 @@ const handleLogin = async (body) => {
     await navigateTo("/order");
     useNuxtApp().$toast.success("خوش برگشتید.");
   } catch (error) {
-    useNuxtApp().$toast.error("مشکلی پیش آمده.");
+    const messages = Object.values(error.data.data).flat();
+    messages.forEach((i) => useNuxtApp().$toast.error(i));
   } finally {
     loading.value = false;
   }

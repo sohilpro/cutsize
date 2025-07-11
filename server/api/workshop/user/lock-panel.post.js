@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
       method: "POST",
       headers: {
         Authorization: `Token ${token}`,
+        "Accept-Language": `fa`,
       },
     });
 

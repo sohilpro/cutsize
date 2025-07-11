@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
     const data = await $fetch(`${api}/workshop/edges/me`, {
       headers: {
         Authorization: `Token ${token}`,
+        "Accept-Language": `fa`,
       },
     });
 

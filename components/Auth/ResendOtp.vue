@@ -59,7 +59,8 @@ const handleResendOtp = async () => {
     useNuxtApp().$toast.info("کد تایید دوباره ارسال شد.");
   } catch (error) {
     emit("endTime", true);
-    return useNuxtApp().$toast.error(error.data.message);
+    const messages = Object.values(error.data.data).flat();
+    messages.forEach((i) => useNuxtApp().$toast.error(i));
   } finally {
     state.loading = false;
   }

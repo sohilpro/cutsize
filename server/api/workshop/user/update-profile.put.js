@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
       body,
       headers: {
         Authorization: `Token ${token}`,
+        "Accept-Language": `fa`,
       },
     });
 

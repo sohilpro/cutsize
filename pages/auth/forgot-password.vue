@@ -43,7 +43,8 @@ const handleChangePassword = async (body) => {
     await navigateTo("/auth/login");
     useNuxtApp().$toast.warning("رمز عبور شما با موفقیت تغییر کرد.");
   } catch (error) {
-    return useNuxtApp().$toast.error(error.data.message);
+    const messages = Object.values(error.data.data).flat();
+    messages.forEach((i) => useNuxtApp().$toast.error(i));
   } finally {
     loading.value = false;
   }

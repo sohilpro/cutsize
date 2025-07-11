@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
       method: "DELETE",
       headers: {
         Authorization: `Token ${token}`,
+        "Accept-Language": `fa`,
       },
     });
 

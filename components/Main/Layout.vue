@@ -87,6 +87,7 @@
         <!-- details -->
         <div class="flex text-lg text-auth-blue items-center gap-5">
           <span
+          v-if="auth.code"
             >کد کارگاه:
             <span
               style="

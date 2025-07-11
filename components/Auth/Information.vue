@@ -110,7 +110,8 @@ const handlInformation = async () => {
     useNuxtApp().$toast.success("اطلاعات با موفقیت ثبت شد.");
   } catch (error) {
     auth.value = null;
-    return useNuxtApp().$toast.error(error.data.message);
+    const messages = Object.values(error.data.data).flat();
+    messages.forEach((i) => useNuxtApp().$toast.error(i));
   }
 };
 </script>
