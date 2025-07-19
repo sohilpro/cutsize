@@ -219,6 +219,7 @@ const togglePopup = () => {
   document.querySelector("body").classList.toggle("overflow-hidden");
 };
 
+
 const show_info = ref(false);
 const togglePopupInfo = () => {
   show_info.value = !show_info.value;
@@ -246,4 +247,18 @@ const handleLogout = async () => {
     return useNuxtApp().$toast.error(error.data.message);
   }
 };
+
+
+
+onMounted(() => {
+  if (auth?.value?.name?.match(/^F-\d+/)) {
+    show_info.value = true
+  }
+})
+
+// watch(() => auth?.value?.name, (newName) => {
+//   if (newName?.match(/^F-\d+/)) {
+//     show_info.value = true
+//   }
+// })
 </script>

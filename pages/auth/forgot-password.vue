@@ -32,7 +32,7 @@ const handleChangePassword = async (body) => {
   loading.value = true;
 
   try {
-    await $fetch("/api/auth/password/confirm-reset", {
+    await $fetch("/api/auth/password/confirm", {
       method: "POST",
       body: {
         new_password: body,
