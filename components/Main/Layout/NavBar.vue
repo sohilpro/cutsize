@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white shadow-md w-full py-5 px-10">
+  <nav class="bg-white sticky z-50 top-0 shadow-md w-full py-5 px-10">
     <div class="flex text-auth-blue justify-between items-center">
       <NuxtLink to="/" class="flex items-center gap-2">
         <IconsLogoNav class="w-20 h-20" />

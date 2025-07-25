@@ -35,7 +35,7 @@
 
           <span class="font-bold text-lg">
             پروژه:
-            <span class="font-normal"> کابینت </span>
+            <span class="font-normal"> {{ data.panel_name }} </span>
           </span>
         </div>
         <div class="flex items-center gap-3 py-3 px-4">
@@ -43,7 +43,7 @@
 
           <span class="font-bold text-lg">
             یادداشت مشتری:
-            <span class="font-normal"> در های یونیت به رنگ آبی باشد. </span>
+            <span class="font-normal"> {{ data.description }} </span>
           </span>
         </div>
       </div>
@@ -96,7 +96,7 @@
           </div>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto scrollbar-hide">
           <table class="w-full border-collapse border border-gray-300">
             <!-- Table Head -->
             <thead>
