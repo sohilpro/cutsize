@@ -23,6 +23,9 @@
           input-class="input-style !pb-0"
           id="mobile"
           v-model.trim="inputs.phone_number"
+          :value="inputs.phone_number"
+          @input="onInputPhone"
+          @paste="onPastePhone"
           ref="mobile"
           placeholder="*******09"
           validation="matches:/^09[0-9][0-9]-?[0-9]{3}-?[0-9]{4}$/|required"
@@ -55,8 +58,11 @@
             id="otp"
             placeholder="-----"
             v-model.trim="inputs.code"
+            :value="inputs.code"
             ref="otp"
             @input.passive="otpCheck"
+            @paste="onPaste"
+            @input-raw="onInput"
             validation-visibility="submit"
             validation="number|required|length:5"
             :validation-messages="{
@@ -154,12 +160,24 @@ const handleSendOtp = async () => {
     state.enableInputOtp = true;
     useNuxtApp().$toast.info("کد تایید را وارد کنید.");
   } catch (error) {
- const messages = Object.values(error.data.data).flat();
+    const messages = Object.values(error.data.data).flat();
     messages.forEach((i) => useNuxtApp().$toast.error(i));
   } finally {
     state.loading = false;
   }
 };
+
+const onInput = (value) =>
+  onPersianNumberInput(value, (val) => (inputs.code = val));
+
+const onPaste = (event) =>
+  onPersianNumberPaste(event, (val) => (inputs.code = val));
+
+const onInputPhone = (value) =>
+  onPersianNumberInput(value, (val) => (inputs.phone_number = val));
+
+const onPastePhone = (event) =>
+  onPersianNumberPaste(event, (val) => (inputs.phone_number = val));
 
 const inputsValue = useInputs();
 

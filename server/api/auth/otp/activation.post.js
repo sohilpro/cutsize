@@ -8,6 +8,9 @@ export default defineEventHandler(async (event) => {
     const data = await $fetch(`${api}/auth/users/verification_confirm`, {
       method: "POST",
       body,
+      headers: {
+        "Accept-Language": `fa`,
+      },
     });
 
     setCookie(event, "token", data?.token, {

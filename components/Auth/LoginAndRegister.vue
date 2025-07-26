@@ -22,6 +22,9 @@
             input-class="input-style"
             id="phone_number"
             v-model="inputs.phone_number"
+            :value="inputs.phone_number"
+            @input="onInput"
+            @paste="onPaste"
             ref="phone_number"
             placeholder="*****0999"
             validation="matches:/^09[0-9][0-9]-?[0-9]{3}-?[0-9]{4}$/|required"
@@ -141,4 +144,10 @@ const inputs = reactive({
 });
 
 const showAndHidePassword = () => (showPassword.value = !showPassword.value);
+
+const onInput = (value) =>
+  onPersianNumberInput(value, (val) => (inputs.phone_number = val));
+
+const onPaste = (event) =>
+  onPersianNumberPaste(event, (val) => (inputs.phone_number = val));
 </script>

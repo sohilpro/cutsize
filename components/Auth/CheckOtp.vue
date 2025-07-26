@@ -16,9 +16,12 @@
           input-class="input-style tracking-[0.8em] text-center !pb-0"
           id="otp"
           placeholder="-----"
-          v-model.trim="inputs.otp"
+          v-model.trim="inputs.code"
+          :value="inputs.code"
           ref="otp"
           @input.passive="otpCheck"
+          @paste="onPaste"
+          @input-raw="onInput"
           validation-visibility="submit"
           validation="number|required|length:5"
           :validation-messages="{
@@ -108,4 +111,10 @@ const handleActivation = async () => {
     state.loading = false;
   }
 };
+
+const onInput = (value) =>
+  onPersianNumberInput(value, (val) => (inputs.code = val));
+
+const onPaste = (event) =>
+  onPersianNumberPaste(event, (val) => (inputs.code = val));
 </script>
