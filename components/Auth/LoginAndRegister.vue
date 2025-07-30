@@ -9,8 +9,6 @@
     @submit="emit('submitForm', inputs)"
   >
     <main class="flex flex-col gap-3">
-      phone=> {{ inputs.phone_number }}
-
       <div class="form-style">
         <label for="username"> شماره موبایل خود را وارد کنید </label>
 

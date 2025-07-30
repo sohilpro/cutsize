@@ -57,14 +57,13 @@
     </h4>
 
     <h4
-      v-if="headInBottom && headShow"
+      v-if="headInBottom && headShow && factory_count.count"
       class="text-white flex justify-center mt-8 gap-2 items-center text-4xl font-semibold"
     >
       در حال حاضر
       <!-- <span class="text-auth-orange font-bold underline">9998</span> -->
       <ClientOnly>
         <AnimatedCounter
-          v-if="factory_count.count"
           :value="factory_count.count"
           :duration="1000"
           class="counter"

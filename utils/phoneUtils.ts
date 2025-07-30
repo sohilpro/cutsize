@@ -4,8 +4,6 @@
  * Converts Persian digits in a string to English digits.
  */
 export function convertPersianToEnglish(str: string): string {
- console.log("[convertPersianToEnglish] input:", str);
-  
   const persian = "۰۱۲۳۴۵۶۷۸۹";
   const english = "0123456789";
   return str.replace(/[۰-۹]/g, (d) => english[persian.indexOf(d)]);
