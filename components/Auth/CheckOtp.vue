@@ -16,7 +16,6 @@
           input-class="input-style tracking-[0.8em] text-center !pb-0"
           id="otp"
           placeholder="-----"
-          v-model.trim="inputs.code"
           :value="inputs.code"
           ref="otp"
           @input.passive="otpCheck"

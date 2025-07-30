@@ -9,6 +9,8 @@
     @submit="emit('submitForm', inputs)"
   >
     <main class="flex flex-col gap-3">
+      phone=> {{ inputs.phone_number }}
+
       <div class="form-style">
         <label for="username"> شماره موبایل خود را وارد کنید </label>
 
@@ -21,16 +23,14 @@
             type="text"
             input-class="input-style"
             id="phone_number"
-            v-model="inputs.phone_number"
             :value="inputs.phone_number"
             @input="onInput"
             @paste="onPaste"
             ref="phone_number"
             placeholder="*****0999"
-            validation="matches:/^09[0-9][0-9]-?[0-9]{3}-?[0-9]{4}$/|required"
+            validation="required"
             :validation-messages="{
               required: 'این فیلد نباید خالی باشد.',
-              matches: 'شماره تلفن راه صحیح وارد کنید.',
             }"
           />
         </div>
@@ -129,6 +129,19 @@ const { btnTitle, showForgotPassword } = defineProps({
     type: Boolean,
     default: true,
   },
+});
+const regex = /^(۰۹|09)[۰-۹0-9]{2}-?[۰-۹0-9]{3}-?[۰-۹0-9]{4}$/;
+
+[
+  '09999360231',
+  '۰۹۱۲۳۴۵۶۷۸۹',
+  '0912-345-6789',
+  '۰۹۱۲-۳۴۵-۶۷۸۹',
+  '۰۹۱۲-345-۶۷۸۹',
+  '8123456789',
+  'abc'
+].forEach(input => {
+  console.log(`${input} → ${regex.test(input) ? '✅ valid' : '❌ invalid'}`);
 });
 
 const emit = defineEmits(["submitForm"]);

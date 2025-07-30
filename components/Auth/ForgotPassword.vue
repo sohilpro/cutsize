@@ -22,16 +22,14 @@
           type="text"
           input-class="input-style !pb-0"
           id="mobile"
-          v-model.trim="inputs.phone_number"
           :value="inputs.phone_number"
           @input="onInputPhone"
           @paste="onPastePhone"
           ref="mobile"
           placeholder="*******09"
-          validation="matches:/^09[0-9][0-9]-?[0-9]{3}-?[0-9]{4}$/|required"
+          validation="required"
           :validation-messages="{
             required: 'این فیلد نباید خالی باشد.',
-            matches: 'شماره تلفن را صحیح وارد کنید.',
           }"
           inputmode="numeric"
           :disabled="!state.endTime"
@@ -57,7 +55,6 @@
             input-class="input-style tracking-[0.8em] text-center !pb-0"
             id="otp"
             placeholder="-----"
-            v-model.trim="inputs.code"
             :value="inputs.code"
             ref="otp"
             @input.passive="otpCheck"
