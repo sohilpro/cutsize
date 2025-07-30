@@ -130,19 +130,6 @@ const { btnTitle, showForgotPassword } = defineProps({
     default: true,
   },
 });
-const regex = /^(۰۹|09)[۰-۹0-9]{2}-?[۰-۹0-9]{3}-?[۰-۹0-9]{4}$/;
-
-[
-  '09999360231',
-  '۰۹۱۲۳۴۵۶۷۸۹',
-  '0912-345-6789',
-  '۰۹۱۲-۳۴۵-۶۷۸۹',
-  '۰۹۱۲-345-۶۷۸۹',
-  '8123456789',
-  'abc'
-].forEach(input => {
-  console.log(`${input} → ${regex.test(input) ? '✅ valid' : '❌ invalid'}`);
-});
 
 const emit = defineEmits(["submitForm"]);
 const loading = useLoading();
